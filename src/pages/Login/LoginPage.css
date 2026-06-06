@@ -1,0 +1,132 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  height: 100vh;
+}
+
+.login-page {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: #f7fbff;
+}
+
+/* Left Section */
+.left-section {
+  flex: 1;
+  background: #f7fbff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.illustration {
+  width: 100%;
+  max-width: 650px;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+/* Right Section */
+.right-section {
+  flex: 1;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  border:#5fa5fa solid 1px;
+  border-radius: 10px;
+  margin:20px;
+}
+
+/* Login Content */
+.login-container {
+  width: 100%;
+  max-width: 450px;
+  padding: 20px;
+}
+
+.logo {
+  width: 180px;
+  margin-bottom: 24px;
+}
+
+.login-title {
+  margin-bottom: 8px !important;
+}
+
+.login-subtitle {
+  display: block;
+  margin-bottom: 24px;
+}
+
+.login-form {
+  margin-top: 20px;
+}
+
+.login-form .ant-form-item {
+  margin-bottom: 20px;
+}
+
+.login-form .ant-input,
+.login-form .ant-input-password {
+  border-radius: 10px;
+}
+
+.forgot-password {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.forgot-password a {
+  text-decoration: none;
+  /* color:var(--primary-color); */
+  font-weight: 500;
+}
+
+.login-button {
+  height: 50px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .left-section {
+    display: none;
+  }
+
+  .right-section {
+    flex: 1;
+    width: 100%;
+    padding: 24px;
+  }
+
+  .login-container {
+    max-width: 420px;
+    padding: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .right-section {
+    padding: 16px;
+  }
+
+  .login-container {
+    padding: 10px;
+  }
+
+  .logo {
+    width: 150px;
+  }
+}

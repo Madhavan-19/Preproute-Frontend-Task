@@ -1,0 +1,34 @@
+/* Force all menu items to be horizontal */
+.custom-menu .ant-menu-item {
+  display: flex !important;
+  align-items: center !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+}
+
+.custom-menu .ant-menu-item .ant-menu-item-icon {
+  display: inline-flex !important;
+  margin: 0 !important;
+}
+
+.custom-menu .ant-menu-item .ant-menu-title-content {
+  display: inline-block !important;
+  margin: 0 !important;
+}
+
+/* Remove any vertical spacing */
+.custom-menu .ant-menu-item .ant-menu-item-icon + span {
+  margin-left: 0 !important;
+}
+
+/* Chapter wise sidebar */
+.question-menu-green .ant-menu-item{
+  border: 1px solid #22c55e !important;
+  border-radius: 8px !important;
+  margin: 8px !important;
+}
+.question-menu-green .ant-menu-item-selected{
+  background:#22c55e !important;
+  color:#fff !important;
+}
+

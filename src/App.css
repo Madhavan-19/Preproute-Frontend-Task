@@ -1,0 +1,38 @@
+:root {
+  --primary-color: #5989f0;
+  --secondary-color: #52c41a;
+  --danger-color: #ff4d4f;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Make all Ant Design form components compact */
+.ant-input,
+.ant-select-selector,
+.ant-picker {
+  height: 32px !important;
+}
+
+.ant-select-selector {
+  padding: 0 11px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-select-selection-item {
+  line-height: 30px !important;
+}
+
+/* For textarea, don't force height */
+textarea.ant-input {
+  height: auto !important;
+  min-height: 32px;
+}
+
+/* Make options section inputs compact */
+.options-wrapper .ant-input {
+  height: 32px !important;
+}
