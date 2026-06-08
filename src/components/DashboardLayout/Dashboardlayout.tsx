@@ -61,6 +61,7 @@ interface DashboardLayoutProps {
   showOriginalMenu?: boolean;
 
   sidebarMenuClassName?: string;
+   totalQuestionsCount?: number; 
 }
 
 export default function DashboardLayout({
@@ -70,6 +71,7 @@ export default function DashboardLayout({
   customSidebarItems,
   onCustomSidebarItemClick,
   selectedCustomKey,
+    totalQuestionsCount,
 }: DashboardLayoutProps) {
   const navigate = useNavigate();
 
@@ -79,6 +81,7 @@ export default function DashboardLayout({
     useState(false);
 
   const selectedKey = location.pathname;
+  const totalQuestions = totalQuestionsCount || customSidebarItems?.length || 0;
 
   /* ================= CHECK MCQ PAGE ================= */
 
@@ -314,8 +317,9 @@ export default function DashboardLayout({
                     <span>
                       Questions
                     </span>
+                    <span>Total Questions: {totalQuestions}</span>
                   </div>
-
+                   
                   <Menu
                     mode="inline"
                     selectedKeys={[

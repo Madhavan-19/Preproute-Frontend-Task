@@ -107,6 +107,7 @@ export default function CreateTest() {
       return questions.map((q, idx) => ({
         key: `question-${q.id}`,
         icon: <CheckOutlined />,
+        
         label: (
           <div
             style={{
@@ -241,6 +242,7 @@ export default function CreateTest() {
       selectedCustomKey={getSelectedKey()}
       sidebarMenuClassName={isChapterWiseStep && questions.length > 0 ? "question-menu-green" : undefined}
       showOriginalMenu={true}
+      totalQuestionsCount={questions.length} 
     >
       <Card
         bordered={false}

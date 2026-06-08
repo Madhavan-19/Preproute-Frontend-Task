@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Card,
   Typography,
+  Radio,
   Tag,
   Button,
   Input,
@@ -47,6 +48,7 @@ export default function ChapterWiseMCQ({
 }: Props) {
   const location = useLocation();
   const [testFormData, setTestFormData] = useState(propTestFormData);
+  const [showPublishScreen, setShowPublishScreen] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([
     {
       id: 1,
@@ -287,17 +289,7 @@ export default function ChapterWiseMCQ({
     if (!validateAllQuestions()) {
       return;
     }
-
-    Modal.confirm({
-      title: "Publish Test?",
-      content: `Are you sure you want to publish this test with ${questions.length} questions?`,
-      okText: "Publish",
-      onOk: () => {
-        if (onPublish) {
-          onPublish(questions);
-        }
-      },
-    });
+     setShowPublishScreen(true);
   };
 
   // Handle CSV export
@@ -338,6 +330,42 @@ export default function ChapterWiseMCQ({
     message.success('CSV exported successfully!');
   };
 
+  const [publishType, setPublishType] = useState<'now' | 'schedule'>('now');
+const [scheduleDate, setScheduleDate] = useState('');
+const [scheduleTime, setScheduleTime] = useState('');
+const [liveUntil, setLiveUntil] = useState('always');
+const [customEndDate, setCustomEndDate] = useState('');
+const [customEndTime, setCustomEndTime] = useState('');
+const [startDate, setStartDate] = useState('');
+const [startTime, setStartTime] = useState('');
+
+const handleConfirmPublish = () => {
+  if (publishType === 'now') {
+    if (!startDate || !startTime) {
+      message.error('Please select both start date and time');
+      return;
+    }
+    message.success(`Test published from ${startDate} at ${startTime}`);
+  }
+  
+  if (publishType === 'schedule') {
+    if (!scheduleDate || !scheduleTime) {
+      message.error('Please select both date and time for scheduled publish');
+      return;
+    }
+    message.success(`Test scheduled for ${scheduleDate} at ${scheduleTime}`);
+  }
+  
+  if (liveUntil === 'custom') {
+    if (!customEndDate || !customEndTime) {
+      message.error('Please select end date and time for custom duration');
+      return;
+    }
+  }
+  
+  message.success("Test Published Successfully!");
+  onPublish?.(questions);
+};
   return (
     <div className="chapter-mcq-page">
       {/* HEADER */}
@@ -446,6 +474,8 @@ export default function ChapterWiseMCQ({
       </Card>
 
       {/* QUESTION HEADER */}
+       {!showPublishScreen ? (
+        <>
       <div className="question-header">
         <div>
           <Title level={5} style={{ marginBottom: 4 }}>
@@ -598,6 +628,163 @@ export default function ChapterWiseMCQ({
           </Button>
         </Space>
       </div>
+      </>
+          ) : (
+            // Publish screen - idha new ah create pannanum
+    
+     // Publish screen - Fixed version
+<div className="publish-review-page">
+  
+  {/* Publish Now - Start Date & End Date Section */}
+
+
+  {/* Segmented Publish Type Buttons */}
+  <div className="publish-type-wrapper">
+    <button 
+      className={`publish-type-btn ${publishType === 'now' ? 'active' : ''}`}
+      onClick={() => setPublishType('now')}
+    >
+      Publish Now
+    </button>
+    <button 
+      className={`publish-type-btn ${publishType === 'schedule' ? 'active' : ''}`}
+      onClick={() => setPublishType('schedule')}
+    >
+      Schedule Publish
+    </button>
+  </div>
+
+  {/* Schedule Publish Section - Shows only when schedule is selected */}
+  {publishType === 'schedule' && (
+    <div className="schedule-section">
+      <Title level={5}>Select Date and Time</Title>
+      <div className="datetime-picker-wrapper">
+        <div className="datetime-field">
+          
+          <Input 
+            type="date" 
+            className="datetime-input"
+            value={scheduleDate}
+            onChange={(e) => setScheduleDate(e.target.value)}
+          />
+        </div>
+        <div className="datetime-field">
+          <Input 
+            type="time" 
+            className="datetime-input"
+            value={scheduleTime}
+            onChange={(e) => setScheduleTime(e.target.value)}
+          />
+        </div>
+      </div>
     </div>
+  )}
+
+  
+
+  {/* Live Until Section */}
+  <div className="live-settings">
+    <Title level={5}>Live Until</Title>
+    <Text type="secondary" className="live-description">
+      Choose how long this test should remain available on the platform.
+    </Text>
+    
+    <Radio.Group 
+      value={liveUntil} 
+      onChange={(e) => setLiveUntil(e.target.value)}
+      className="live-options-group"
+    >
+      <div className="live-options-grid">
+        <Radio value="always">Always Available</Radio>
+        <Radio value="1week">1 Week</Radio>
+        <Radio value="2weeks">2 Weeks</Radio>
+        <Radio value="3weeks">3 Weeks</Radio>
+        <Radio value="1month">1 Month</Radio>
+        <Radio value="custom">Custom Duration</Radio>
+      </div>
+    </Radio.Group>
+
+    {/* Custom Duration Date Picker */}
+    {liveUntil === 'custom' && (
+      <div className="custom-date-wrapper">
+        <Text className="field-label">Select End Date</Text>
+        <Input 
+          type="date" 
+          className="end-date-input"
+          value={customEndDate}
+          onChange={(e) => setCustomEndDate(e.target.value)}
+        />
+        <Text className="field-label" style={{ marginTop: 12 }}>Select End Time</Text>
+        <Input 
+          type="time" 
+          className="end-time-input"
+          value={customEndTime}
+          onChange={(e) => setCustomEndTime(e.target.value)}
+        />
+      </div>
+    )}
+
+      {publishType === 'now' && (
+    <div className="date-range-section">
+      
+      <div className="datetime-picker-wrapper">
+        <div className="datetime-field">
+          <Text className="field-label">Start Date</Text>
+          <Input 
+            type="date" 
+            className="datetime-input"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+        </div>
+        <div className="datetime-field">
+          <Text className="field-label">Start Time</Text>
+          <Input 
+            type="time" 
+            className="datetime-input"
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+          />
+        </div>
+      </div>
+    </div>
+  )}
+  {publishType === 'schedule' && (
+    <div className="schedule-section">
+    
+      <div className="datetime-picker-wrapper">
+        <div className="datetime-field">
+          
+          <Input 
+            type="date" 
+            className="datetime-input"
+            placeholder="Select End Date"
+            value={scheduleDate}
+            onChange={(e) => setScheduleDate(e.target.value)}
+          />
+        </div>
+        <div className="datetime-field">
+          <Input 
+            type="time" 
+            className="datetime-input"
+            value={scheduleTime}
+            onChange={(e) => setScheduleTime(e.target.value)}
+          />
+        </div>
+      </div>
+    </div>
+  )}
+  </div>
+
+  {/* Action Buttons */}
+  <div className="publish-actions">
+    <Button size="large" onClick={() => setShowPublishScreen(false)}>Cancel</Button>
+    <Button type="primary" size="large" onClick={handleConfirmPublish}>Confirm</Button>
+  </div>
+</div>
+          )}
+      </div>
+ 
+    
   );
 }

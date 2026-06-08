@@ -1,18 +1,9 @@
 import { useState } from "react";
 import type { FormProps } from "antd";
-import {
-  Button,
-  Form,
-  Input,
-  Typography,
-} from "antd";
-import {
-  EyeInvisibleOutlined,
-  EyeTwoTone,
-} from "@ant-design/icons";
+import { Button, Form, Input,Typography} from "antd";
+import {EyeInvisibleOutlined,EyeTwoTone} from "@ant-design/icons";
 import "./LoginPage.css";
 import { useNavigate } from "react-router-dom";
-
 import LeftImage from "../../assets/images/login-left-images.png";
 import logo from "../../assets/images/Preproute-logo.png";
 
