@@ -1,43 +1,15 @@
-import {
-  Layout,
-  Menu,
-  Avatar,
-  Badge,
-  Dropdown,
-  Typography,
-} from "antd";
-
-import {
-  DashboardOutlined,
-  PlusSquareOutlined,
-  SearchOutlined,
-  BellOutlined,
-  UserOutlined,
-  LogoutOutlined,
-  SettingOutlined,
-  DownOutlined,
-  QuestionCircleOutlined,
-  BarChartOutlined,
-  FileTextOutlined,
-  BookOutlined,
-  FolderOpenOutlined,
-} from "@ant-design/icons";
-
-import {
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-
+import {Layout,Menu,Avatar,Badge,Dropdown,Typography} from "antd";
+import { DashboardOutlined, PlusSquareOutlined, SearchOutlined, BellOutlined,  UserOutlined, LogoutOutlined, SettingOutlined,DownOutlined, QuestionCircleOutlined, BarChartOutlined, FileTextOutlined, BookOutlined, FolderOpenOutlined} from "@ant-design/icons";
+import {useNavigate,useLocation} from "react-router-dom";
 import { useState } from "react";
-
 import "./DashboardLayout.css";
-
 import logo from "../../assets/images/Preproute-logo.png";
+import avator from "../../assets/images/Avator.png"
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
 
-/* ================= ICON EXPORTS ================= */
+/*ICON EXPORT */
 
 export const DASHBOARD_ICONS = {
   dashboard: <DashboardOutlined />,
@@ -55,13 +27,10 @@ interface DashboardLayoutProps {
   onCustomSidebarItemClick?: (
     key: string
   ) => void;
-
   selectedCustomKey?: string;
-
   showOriginalMenu?: boolean;
-
   sidebarMenuClassName?: string;
-   totalQuestionsCount?: number; 
+  totalQuestionsCount?: number; 
 }
 
 export default function DashboardLayout({
@@ -83,13 +52,13 @@ export default function DashboardLayout({
   const selectedKey = location.pathname;
   const totalQuestions = totalQuestionsCount || customSidebarItems?.length || 0;
 
-  /* ================= CHECK MCQ PAGE ================= */
+  /* CHECK MCQ PAGE */
 
   const isMCQPage =
     customSidebarItems &&
     customSidebarItems.length > 0;
 
-  /* ================= PROFILE MENU ================= */
+  /*PROFILE MENU  */
 
   const profileMenu = {
     items: [
@@ -118,7 +87,7 @@ export default function DashboardLayout({
     ],
   };
 
-  /* ================= MENU CLICK ================= */
+  /* MENU CLICK */
 
   const handleMenuClick = ({
     key,
@@ -138,7 +107,7 @@ export default function DashboardLayout({
     navigate(key);
   };
 
-  /* ================= SELECTED KEY ================= */
+  /*  SELECTED KEY */
 
   const getSelectedKey = () => {
     if (
@@ -153,7 +122,7 @@ export default function DashboardLayout({
 
   return (
     <Layout className="layout-container">
-      {/* ================= HEADER ================= */}
+      {/* HEADER  */}
 
       <Header className="top-navbar">
         <div className="navbar-left">
@@ -180,7 +149,8 @@ export default function DashboardLayout({
             <div className="profile-wrapper">
               <Avatar
                 size={42}
-                src="https://i.pravatar.cc/100"
+                src={avator}
+                className="Profile-img"
               />
 
               <div className="profile-info">
@@ -200,7 +170,7 @@ export default function DashboardLayout({
       </Header>
 
       <Layout>
-        {/* ================= SIDEBAR ================= */}
+        {/*  SIDEBAR  */}
 
         {!hideSidebar && (
           <Sider
@@ -210,7 +180,7 @@ export default function DashboardLayout({
             collapsed={collapsed}
             trigger={null}
           >
-            {/* ================= NORMAL SIDEBAR ================= */}
+            {/* NORMAL SIDEBAR */}
 
             {!isMCQPage && (
               <Menu
@@ -246,7 +216,7 @@ export default function DashboardLayout({
               />
             )}
 
-            {/* ================= MCQ SIDEBAR ================= */}
+            {/*MCQ SIDEBAR*/}
 
             {isMCQPage && (
               <div className="sidebar-layout">
@@ -339,7 +309,7 @@ export default function DashboardLayout({
           </Sider>
         )}
 
-        {/* ================= CONTENT ================= */}
+        {/* CONTENT  */}
 
         <Content
           className={`content-area ${

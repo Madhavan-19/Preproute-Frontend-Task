@@ -56,13 +56,10 @@
 }
 
 .notification-box {
-  width: 42px;
-  height: 42px;
-
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-
-  background: #f3f4f6;
-
+  border: 1px solid #d1d5db;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,12 +68,19 @@
 
   cursor: pointer;
 }
+.Profile-img {
+  background-color: #ffd284;
+  border: 1px solid #6366f1;
+  overflow: visible;
+}
 
+.Profile-img img {
+  margin-top: -10px;
+}
 .profile-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
-
   cursor: pointer;
 }
 
@@ -118,7 +122,8 @@
 
 .custom-menu .ant-menu-item-selected {
   background: #eef2ff !important;
-}
+   border-left: 2px solid #6366f2 !important;
+  }
 
 .custom-menu
   .ant-menu-item-selected
