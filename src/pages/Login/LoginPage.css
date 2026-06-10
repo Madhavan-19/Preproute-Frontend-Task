@@ -93,11 +93,22 @@
   font-size: 12px;
 }
 
-.login-button {
+.login-button.ant-btn {
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: #fff !important;
+
   height: 38px;
   border-radius: 8px;
   font-weight: 600;
   font-size: 14px;
+}
+
+.login-button.ant-btn:hover,
+.login-button.ant-btn:focus {
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: #fff !important;
 }
 
 /* Tablet */

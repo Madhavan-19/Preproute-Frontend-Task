@@ -119,7 +119,7 @@ export default function Login() {
 
             <Button
               className="login-button"
-              type="primary"
+              
               htmlType="submit"
               size="large"
               block

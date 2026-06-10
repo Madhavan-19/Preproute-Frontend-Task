@@ -4,6 +4,7 @@ import Login from "./pages/Login/Login";
 import CreateTest from "./pages/CreateTest/CreateTest";
 import TestTracking  from "./pages/TestTrack/TestTracking";
 import Dashboard  from "./pages/Dashboard/Dashboard";
+import './App.css'
 
 function App() {
   return (

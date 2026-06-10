@@ -1,7 +1,9 @@
 :root {
   --primary-color: #5989f0;
-  --secondary-color: #52c41a;
-  --danger-color: #ff4d4f;
+  --purple-color:#7489ff;
+  --font-color-purple:#384ec7;
+  --question-color:#0c9d61;
+  --danger-color:#ff7f7f;
 }
 html, body {
   height: 100%;
