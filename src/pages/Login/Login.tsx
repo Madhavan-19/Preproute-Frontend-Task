@@ -1,66 +1,18 @@
-import { useState } from "react";
+import { Button, Form, Input, Typography } from "antd";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import type { FormProps } from "antd";
-import { Button, Form, Input,Typography,message} from "antd";
-import {EyeInvisibleOutlined,EyeTwoTone} from "@ant-design/icons";
-import "./LoginPage.css";
-import { useNavigate } from "react-router-dom";
 import LeftImage from "../../assets/images/login-left-images.png";
 import logo from "../../assets/images/Preproute-logo.png";
+import { useLogin } from "./useLogin";
+import type { LoginForm } from "./Login.type";
+import "./LoginPage.css";
 
 const { Title, Text } = Typography;
 
-type LoginForm = {
-  userid: string;
-  password: string;
-};
-
 export default function Login() {
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { loading, handleLogin } = useLogin();
 
- const onFinish: FormProps<LoginForm>["onFinish"] =
-  async (values) => {
-    try {
-      setLoading(true);
-
-      // Dummy Credentials
-      const dummyUser = {
-        userid: "admin",
-        password: "admin123",
-        token: "dummy-token-123",
-      };
-
-      // API Ready Structure
-      // const response = await axiosInstance.post(
-      //   "/auth/login",
-      //   values
-      // );
-
-      // const token = response.data?.token;
-
-      if (
-        values.userid === dummyUser.userid &&
-        values.password === dummyUser.password
-      ) {
-        localStorage.setItem(
-          "token",
-          dummyUser.token
-        );
-
-        message.success("Login Successful");
-
-        navigate("/dashboard");
-      } else {
-        message.error(
-          "Invalid User ID or Password"
-        );
-      }
-    } catch (error: any) {
-      message.error("Login Failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const onFinish: FormProps<LoginForm>["onFinish"] = handleLogin;
 
   return (
     <div className="login-page">
@@ -74,18 +26,15 @@ export default function Login() {
         <div className="login-container">
           <img src={logo} alt="Logo" className="logo" />
           <Title level={2} className="login-title">Login</Title>
-          <Text type="secondary" className="login-subtitle">Use your company provided login credentials</Text>
+          <Text type="secondary" className="login-subtitle">
+            Use your company provided login credentials
+          </Text>
 
-          <Form<LoginForm> layout="vertical" onFinish={onFinish} className="login-form" >
+          <Form<LoginForm> layout="vertical" onFinish={onFinish} className="login-form">
             <Form.Item
               label="User ID"
               name="userid"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter User ID",
-                },
-              ]}
+              rules={[{ required: true, message: "Please enter User ID" }]}
             >
               <Input size="large" placeholder="Enter User ID" />
             </Form.Item>
@@ -93,22 +42,13 @@ export default function Login() {
             <Form.Item
               label="Password"
               name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter Password",
-                },
-              ]}
+              rules={[{ required: true, message: "Please enter Password" }]}
             >
               <Input.Password
                 size="large"
                 placeholder="Enter Password"
                 iconRender={(visible) =>
-                  visible ? (
-                    <EyeTwoTone />
-                  ) : (
-                    <EyeInvisibleOutlined />
-                  )
+                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                 }
               />
             </Form.Item>
@@ -119,7 +59,6 @@ export default function Login() {
 
             <Button
               className="login-button"
-              
               htmlType="submit"
               size="large"
               block

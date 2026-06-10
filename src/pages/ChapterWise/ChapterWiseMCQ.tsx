@@ -24,7 +24,7 @@ import {
 } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import "./ChapterWiseMCQ.css";
-import type { TestFormData, Question } from "../CreateTest/CreateTest";
+import type { TestFormData, Question } from "../CreateTest/Create.types";
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -36,6 +36,7 @@ interface Props {
   onPublish?: (questions: Question[]) => void;
   testFormData?: TestFormData;
   onEditTestDetails?: () => void;
+  loading?: boolean;
 }
 
 export default function ChapterWiseMCQ({

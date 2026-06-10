@@ -2,19 +2,15 @@
   min-height: 100vh;
 }
 
-/* ================= HEADER ================= */
+/*  HEADER  */
 
 .top-navbar {
-  height: 72px;
-
+  height: 60px;
   background: #ffffff;
-
   border-bottom: 1px solid #e5e7eb;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding-inline: 24px;
 }
 
@@ -27,17 +23,12 @@
 .sidebar-trigger {
   width: 38px;
   height: 38px;
-
   border-radius: 10px;
-
   background: #f3f4f6;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 18px;
-
   cursor: pointer;
 }
 
@@ -63,14 +54,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 18px;
-
   cursor: pointer;
 }
 .Profile-img {
   background-color: #ffd284;
-  border: 1px solid #6366f1;
+  border: 1px solid var(--purple-color);
   overflow: visible;
 }
 
@@ -87,88 +76,73 @@
 .profile-info {
   display: flex;
   flex-direction: column;
-
   line-height: 16px;
 }
 
-/* ================= SIDEBAR ================= */
+/* SIDEBAR  */
 
 .sidebar {
   background: #ffffff !important;
-
   border-right: 1px solid #e5e7eb;
 }
 
-/* ================= NORMAL MENU ================= */
+/*  NORMAL MENU*/
 
 .custom-menu {
   border-inline-end: none !important;
-
-  padding-top: 30px;
+  padding-top: 10px;
 }
 
 .custom-menu .ant-menu-item {
-  height: 50px !important;
-
-  margin: 6px 12px !important;
-
+  height: 45px !important;
+  margin: 6px 5px !important;
   border-radius: 12px !important;
-
   display: flex !important;
   align-items: center !important;
-
   gap: 12px;
 }
 
 .custom-menu .ant-menu-item-selected {
   background: #eef2ff !important;
-   border-left: 2px solid #6366f2 !important;
+  border-left: 3px solid var(--font-color-purple) !important;
   }
 
 .custom-menu
   .ant-menu-item-selected
   .ant-menu-item-icon {
-  color: #4f46e5 !important;
+  color: var(--font-color-purple) !important;
 }
 
 .custom-menu
   .ant-menu-item-selected
   .ant-menu-title-content {
-  color: #4f46e5 !important;
-
+  color: var(--font-color-purple) !important;
   font-weight: 600;
 }
 
-/* ================= MCQ SIDEBAR ================= */
+/*  MCQ SIDEBAR  */
 
 .sidebar-layout {
   display: flex;
-
   height: 100%;
 }
 
-/* ================= LEFT ICON MENU ================= */
+/*  LEFT ICON MENU */
 
 .icon-menu {
-  width: 72px;
-
+  width: 70px;
   border-inline-end: 1px solid #f1f5f9 !important;
-
   padding-top: 20px;
 }
 
 .icon-menu .ant-menu-item {
   width: 46px !important;
   height: 46px !important;
-
   margin: 10px auto !important;
-
   border-radius: 12px !important;
-
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-
   padding: 0 !important;
 }
 
@@ -178,7 +152,6 @@
 
 .icon-menu .ant-menu-item-icon {
   font-size: 18px !important;
-
   margin: 0 !important;
 }
 
@@ -189,14 +162,13 @@
 .icon-menu
   .ant-menu-item-selected
   .ant-menu-item-icon {
-  color: #4f46e5 !important;
+  color: var(--font-color-purple) !important;
 }
 
-/* ================= QUESTIONS ================= */
+/*  QUESTIONS*/
 
 .question-section {
   flex: 1;
-
   padding: 20px 14px;
 }
 
@@ -204,48 +176,35 @@
   display: flex;
   align-items: center;
   gap: 8px;
-
   margin-bottom: 14px;
-
   font-size: 14px;
   font-weight: 600;
-
   color: #374151;
 }
 
-/* ================= QUESTION MENU ================= */
+/*  QUESTION MENU */
 
 .question-menu {
   border-inline-end: none !important;
-
   background: transparent !important;
 }
 
 .question-menu .ant-menu-item {
   height: 52px !important;
-
   border-radius: 12px !important;
-
   margin-bottom: 10px !important;
-
   display: flex !important;
   align-items: center !important;
-
   padding-inline: 14px !important;
-
   background: #ffffff !important;
-
   border: 1px solid #e5e7eb !important;
 }
 
-
-
 .question-menu .ant-menu-title-content {
   font-size: 13px;
-
   color: #1f2937;
 }
-/* ================= QUESTION MENU ================= */
+/*  QUESTION MENU  */
 
 .question-menu {
   border-inline-end: none !important;
@@ -256,50 +215,34 @@
 
 .question-menu .ant-menu-item {
   height: 52px !important;
-
   border-radius: 12px !important;
-
   margin-bottom: 10px !important;
-
   display: flex !important;
   align-items: center !important;
-
   padding-inline: 14px !important;
-
   background: #ffffff !important;
-
   border: 1px solid #22c55e !important;
-
   transition: all 0.25s ease;
 }
-
 /* Hover */
-
 .question-menu .ant-menu-item:hover {
   background: #f0fdf4 !important;
   border-color: #16a34a !important;
 }
-
 /* Selected */
-
 .question-menu .ant-menu-item-selected {
   background: #f0fdf4 !important;
-
   border: 1px solid #22c55e !important;
-
   box-shadow: none !important;
 }
-
 /* Remove default blue line */
-
 .question-menu .ant-menu-item-selected::after {
   display: none !important;
 }
 
-/* ================= TICK ICON ================= */
 
 /* antd success tick style */
-/* ================= QUESTION MENU ================= */
+/* QUESTION MENU  */
 
 .question-menu {
   border-inline-end: none !important;
@@ -310,21 +253,14 @@
 
 .question-menu .ant-menu-item {
   height: 50px !important;
-
   border-radius: 12px !important;
-
   margin-bottom: 10px !important;
-
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-
   padding-inline: 14px !important;
-
   background: #ffffff !important;
-
   border: 1px solid #22c55e !important;
-
   transition: all 0.25s ease;
 }
 
@@ -339,9 +275,7 @@
 
 .question-menu .ant-menu-item-selected {
   background: #f0fdf4 !important;
-
   border: 1px solid #22c55e !important;
-
   box-shadow: none !important;
 }
 
@@ -351,7 +285,7 @@
   display: none !important;
 }
 
-/* ================= LEFT GREEN TICK ================= */
+/*  LEFT GREEN TICK */
 
 .question-menu .ant-menu-item-icon {
   width: 15px;
@@ -367,18 +301,16 @@
   margin-right: 10px !important;
 }
 
-/* ================= TEXT ================= */
+/* TEXT*/
 
 .question-menu .ant-menu-title-content {
   flex: 1;
-
   font-size: 13px;
   font-weight: 500;
-
   color: #1f2937 !important;
 }
 
-/* ================= RIGHT ARROW ================= */
+/*  RIGHT ARROW*/
 
 .question-menu .question-arrow {
   font-size: 10px;
@@ -395,19 +327,18 @@
   font-weight: 600;
 }
 
-/* ================= CONTENT ================= */
+/*CONTENT */
 
 .content-area {
   background: #ffffff;
-
-  padding: 24px;
+  padding: 1px;
 }
 
 .content-area.full-width {
   padding: 0;
 }
 
-/* ================= MOBILE ================= */
+/*  MOBILE*/
 
 @media (max-width: 768px) {
   .profile-info {

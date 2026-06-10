@@ -1,10 +1,12 @@
 import {Layout,Menu,Avatar,Badge,Dropdown,Typography} from "antd";
-import { DashboardOutlined, PlusSquareOutlined, SearchOutlined, BellOutlined,  UserOutlined, LogoutOutlined, SettingOutlined,DownOutlined, QuestionCircleOutlined, BarChartOutlined, FileTextOutlined, BookOutlined, FolderOpenOutlined} from "@ant-design/icons";
+import { DashboardOutlined, PlusSquareOutlined, SearchOutlined,UserOutlined, LogoutOutlined, SettingOutlined, QuestionCircleOutlined, BarChartOutlined, FileTextOutlined, BookOutlined, FolderOpenOutlined} from "@ant-design/icons";
 import {useNavigate,useLocation} from "react-router-dom";
 import { useState } from "react";
 import "./DashboardLayout.css";
 import logo from "../../assets/images/Preproute-logo.png";
 import avator from "../../assets/images/Avator.png"
+import notify from "../../assets/icons/Vector.svg"
+import aero from "../../assets/images/Aero.png";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -136,11 +138,18 @@ export default function DashboardLayout({
         </div>
 
         <div className="navbar-right">
-          <Badge count={3}>
+         
             <div className="notification-box">
-              <BellOutlined />
+                <Badge 
+                  dot
+                  offset={[-3, 2]}  // Adjust position as needed
+                   style={{ backgroundColor: '#0c9d61' }}  // Green color
+                   size="medium"
+                 >
+              <img src={notify} style={{width:'15px'}}/>
+              </Badge>
             </div>
-          </Badge>
+          
 
           <Dropdown
             menu={profileMenu}
@@ -163,7 +172,7 @@ export default function DashboardLayout({
                 </Text>
               </div>
 
-              <DownOutlined />
+            <img src={aero}/>
             </div>
           </Dropdown>
         </div>
@@ -276,7 +285,7 @@ export default function DashboardLayout({
     label: "",
   },
 ]}
-                />
+    />
 
                 {/* RIGHT QUESTIONS */}
 
