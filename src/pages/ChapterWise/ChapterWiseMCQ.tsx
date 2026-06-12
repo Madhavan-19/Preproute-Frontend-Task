@@ -28,6 +28,7 @@ import {
 import { useLocation } from "react-router-dom";
 import "./ChapterWiseMCQ.css";
 import type { TestFormData, Question } from "../CreateTest/Create.types";
+import Chapter_1 from '../../assets/icons/chapter-1.svg'
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -395,7 +396,7 @@ const handleConfirmPublish = () => {
           <div style={{ flex: 1 }}>
             <div className="chapter-title-row">
               <Title level={5} style={{ margin: 0 }}>
-                📚 {testFormData?.testName || "Untitled Test"}
+                <img src={Chapter_1}/> {testFormData?.testName || "Untitled Test"}
               </Title>
              <Tag
   className={`difficulty-tag ${
@@ -429,14 +430,14 @@ const handleConfirmPublish = () => {
               <div>
                 <Text type="secondary">Topic</Text>
                 <div className="tag-row">
-                  <Tag color="gold">{testFormData?.topic || "Not Selected"}</Tag>
+                  <Tag className="topic-tag">{testFormData?.topic || "Not Selected"}</Tag>
                 </div>
               </div>
 
               <div>
                 <Text type="secondary">Sub Topic</Text>
                 <div className="tag-row">
-                  <Tag color="gold">{testFormData?.subTopic || "Not Selected"}</Tag>
+                  <Tag className="topic-tag">{testFormData?.subTopic || "Not Selected"}</Tag>
                 </div>
               </div>
             </div>
@@ -458,7 +459,7 @@ const handleConfirmPublish = () => {
             <div 
               className="exam-details-clickable" 
               style={{ 
-                marginTop: 117,
+                marginTop: 130,
                 padding: "7px 11px",
                 borderRadius: "8px",
                 cursor: "pointer",
@@ -470,15 +471,15 @@ const handleConfirmPublish = () => {
             >
               <Space size="middle" split={<span style={{ color: "#d9d9d9" }}>|</span>}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                  <ClockCircleOutlined style={{ color: "#722ed1" }} /> 
+                  <ClockCircleOutlined style={{ color: "gray" }} /> 
                   <strong>{testFormData?.duration || 0}</strong> Min
                 </span>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                  <FileTextOutlined style={{ color: "#722ed1" }} /> 
+                  <FileTextOutlined style={{ color: "gray" }} /> 
                   <strong>{questions.length}</strong>/{maxQuestions} Q's
                 </span>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                  <TrophyOutlined style={{ color: "#722ed1" }} /> 
+                  <TrophyOutlined style={{ color: "gray" }} /> 
                   <strong>{testFormData?.totalMarks || 0}</strong> Marks
                 </span>
               </Space>
@@ -495,12 +496,6 @@ const handleConfirmPublish = () => {
           <Title level={5} style={{ marginBottom: 4 }}>
             Question {currentIndex + 1} / {questions.length}
           </Title>
-         
-          {questions.length === maxQuestions && (
-            <Text type="success" style={{ fontSize: 12, color: "#52c41a" }}>
-              ✓ All {maxQuestions} questions added
-            </Text>
-          )}
           <Button type="link" danger icon={<DeleteOutlined />} className="delete-btn" onClick={clearQuestion}>
             Clear Question
           </Button>

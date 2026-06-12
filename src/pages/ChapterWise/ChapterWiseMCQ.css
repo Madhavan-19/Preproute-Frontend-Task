@@ -129,8 +129,9 @@
 }
 
 .delete-btn {
-  padding-left: 0 !important;
+  padding-left: 2px 3px !important;
   font-size: 12px;
+  background-color: #fffbfb !important;
 }
 
 /* =========================
@@ -813,8 +814,8 @@
 
 /* Easy */
 .difficulty-tag.easy {
-  background: #dcfce7 !important;
-  color: #2ab7a9 !important;
+  background: #2ab8a9 !important;
+  color:white !important;
 }
 
 /* Medium */
@@ -827,4 +828,12 @@
 .difficulty-tag.hard {
   background: #fee2e2 !important;
   color: #dc2626 !important;
+}
+.topic-tag{
+  background-color: white;
+  border: 1px solid #ffc82c;
+  color:#ffc82c;
+  font-weight: 600;
+  padding:2px 8px;
+  border-radius: 6px;
 }
