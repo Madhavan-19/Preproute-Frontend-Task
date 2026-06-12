@@ -132,7 +132,7 @@
 .icon-menu {
   width: 70px;
   border-inline-end: 1px solid #f1f5f9 !important;
-  padding-top: 20px;
+  padding-top: 50px;
 }
 
 .icon-menu .ant-menu-item {
@@ -169,7 +169,7 @@
 
 .question-section {
   flex: 1;
-  padding: 20px 14px;
+  padding: 70px 24px;
 }
 
 .question-title {
@@ -252,7 +252,7 @@
 /* Question Item */
 
 .question-menu .ant-menu-item {
-  height: 50px !important;
+  height: 40px !important;
   border-radius: 12px !important;
   margin-bottom: 10px !important;
   display: flex !important;

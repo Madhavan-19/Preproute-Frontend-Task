@@ -1,5 +1,5 @@
 import {Layout,Menu,Avatar,Badge,Dropdown,Typography} from "antd";
-import { DashboardOutlined, PlusSquareOutlined, SearchOutlined,UserOutlined, LogoutOutlined, SettingOutlined, QuestionCircleOutlined, BarChartOutlined, FileTextOutlined, BookOutlined, FolderOpenOutlined} from "@ant-design/icons";
+import { DashboardOutlined, PlusSquareOutlined, SearchOutlined,UserOutlined, LogoutOutlined, SettingOutlined, BarChartOutlined, FileTextOutlined, BookOutlined, FolderOpenOutlined,DoubleRightOutlined} from "@ant-design/icons";
 import {useNavigate,useLocation} from "react-router-dom";
 import { useState } from "react";
 import "./DashboardLayout.css";
@@ -291,13 +291,12 @@ export default function DashboardLayout({
 
                 <div className="question-section">
                   <div className="question-title">
-                    <QuestionCircleOutlined />
-
                     <span>
                       Questions
                     </span>
-                    <span>Total Questions: {totalQuestions}</span>
+                    <DoubleRightOutlined style={{marginLeft:'100px'}} />
                   </div>
+                  <span>Total Questions: {totalQuestions}</span>
                    
                   <Menu
                     mode="inline"

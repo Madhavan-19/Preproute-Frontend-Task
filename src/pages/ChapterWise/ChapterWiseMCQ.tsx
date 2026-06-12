@@ -21,6 +21,9 @@ import {
   TrophyOutlined,
   EditOutlined,
   DownloadOutlined,
+    CheckCircleOutlined,
+  ExclamationCircleOutlined,
+  CloseCircleOutlined
 } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import "./ChapterWiseMCQ.css";
@@ -394,17 +397,27 @@ const handleConfirmPublish = () => {
               <Title level={5} style={{ margin: 0 }}>
                 📚 {testFormData?.testName || "Untitled Test"}
               </Title>
-              <Tag
-                color={
-                  testFormData?.difficultyLevel === "easy"
-                    ? "green"
-                    : testFormData?.difficultyLevel === "medium"
-                    ? "orange"
-                    : "red"
-                }
-              >
-                {testFormData?.difficultyLevel || "Easy"}
-              </Tag>
+             <Tag
+  className={`difficulty-tag ${
+    testFormData?.difficultyLevel === "easy"
+      ? "easy"
+      : testFormData?.difficultyLevel === "medium"
+      ? "medium"
+      : "hard"
+  }`}
+>
+  {testFormData?.difficultyLevel === "easy" ? (
+    <CheckCircleOutlined />
+  ) : testFormData?.difficultyLevel === "medium" ? (
+    <ExclamationCircleOutlined />
+  ) : (
+    <CloseCircleOutlined />
+  )}
+
+  <span style={{ marginLeft: 6 }}>
+    {testFormData?.difficultyLevel || "Easy"}
+  </span>
+</Tag>
             </div>
 
             <div className="chapter-meta">

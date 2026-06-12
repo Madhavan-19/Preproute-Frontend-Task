@@ -36,14 +36,14 @@
   height: 38px !important;
   padding: 0 30px !important;
   border-radius: 8px !important;
-  background: #6366f1 !important;
+  background: var(--purple-color) !important;
   border: none !important;
   font-weight: 500;
   box-shadow: none !important;
 }
 
 .publish-btn:hover {
-  background: #4f46e5 !important;
+  background: var(--purple-color) !important;
 }
 
 /* =========================
@@ -802,4 +802,29 @@
     flex-direction: column;
     gap: 16px;
   }
+}
+.difficulty-tag.ant-tag {
+  border-radius: 10px;
+  padding: 4px 14px;
+  font-weight: 600;
+  border: none;
+  margin: 0;
+}
+
+/* Easy */
+.difficulty-tag.easy {
+  background: #dcfce7 !important;
+  color: #2ab7a9 !important;
+}
+
+/* Medium */
+.difficulty-tag.medium {
+  background: #fef3c7 !important;
+  color: #b45309 !important;
+}
+
+/* Hard */
+.difficulty-tag.hard {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
 }
