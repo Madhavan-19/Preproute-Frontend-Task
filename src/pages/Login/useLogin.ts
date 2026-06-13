@@ -2,12 +2,9 @@ import { useState } from "react";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import type { LoginForm } from "./Login.type";
+import axiosInstance from "../../api/axiosConfig";
 
-const dummyUser = {
-  userid: "admin",
-  password: "admin123",
-  token: "dummy-token-123",
-};
+
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -16,28 +13,33 @@ export const useLogin = () => {
   const handleLogin = async (values: LoginForm) => {
     try {
       setLoading(true);
+   const response = await axiosInstance.post("/auth/login", {
+     userId: values.userId,
+     password: values.password,
+   });
 
-      // API Ready Structure (Commented)
-      // const response = await axiosInstance.post("/auth/login", values);
-      // const token = response.data?.token;
-      // localStorage.setItem("token", token);
-      // message.success("Login Successful");
-      // navigate("/dashboard");
+  const token = response.data?.data?.token;
+    const user = response.data?.data?.user;
 
-      // Dummy authentication
-      if (
-        values.userid === dummyUser.userid &&
-        values.password === dummyUser.password
-      ) {
-        localStorage.setItem("token", dummyUser.token);
-        message.success("Login Successful");
-        navigate("/dashboard");
-      } else {
-        message.error("Invalid User ID or Password");
-      }
+  if (token) {
+     localStorage.setItem("token", token);
+     localStorage.setItem("user", JSON.stringify(user));
+
+     message.success("Login Successful");
+    navigate("/dashboard");
+  } else {
+     message.error("Token not found");
+}
+
     } catch (error: any) {
-      message.error("Login Failed");
-    } finally {
+  console.log(error?.response);
+  message.error(
+    error?.response?.data?.message ||
+    error?.message ||
+    "Login Failed"
+  );
+}
+     finally {
       setLoading(false);
     }
   };

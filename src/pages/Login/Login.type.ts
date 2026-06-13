@@ -1,10 +1,10 @@
 export type LoginForm = {
-  userid: string;
+  userId: string;
   password: string;
 };
 
 export type DummyUser = {
-  userid: string;
+  userId: string;
   password: string;
   token: string;
 };

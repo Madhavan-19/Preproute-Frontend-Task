@@ -33,7 +33,7 @@ export default function Login() {
           <Form<LoginForm> layout="vertical" onFinish={onFinish} className="login-form">
             <Form.Item
               label="User ID"
-              name="userid"
+              name="userId"
               rules={[{ required: true, message: "Please enter User ID" }]}
             >
               <Input size="large" placeholder="Enter User ID" />
