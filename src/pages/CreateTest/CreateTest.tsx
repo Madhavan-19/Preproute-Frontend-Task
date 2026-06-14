@@ -27,6 +27,7 @@ export default function CreateTest() {
     topics,
     subjectsLoading,
     topicsLoading,
+     testId, 
     subTopicsLoading
   } = useCreateTest();
 
@@ -299,6 +300,7 @@ export default function CreateTest() {
             testFormData={formData}
             onEditTestDetails={handleEditTestDetails}
             loading={loading}
+            testId={testId} 
           />
         )}
       </Card>

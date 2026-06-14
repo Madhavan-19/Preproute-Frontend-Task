@@ -39,6 +39,7 @@ interface Props {
   selectedQuestionId?: string;
   onPublish?: (questions: Question[]) => void;
   testFormData?: TestFormData;
+   testId?: string;
   onEditTestDetails?: () => void;
   loading?: boolean;
 }
@@ -424,7 +425,7 @@ const handleConfirmPublish = () => {
             <div className="chapter-meta">
               <div>
                 <Text type="secondary">Subject</Text>
-                <span>: {testFormData?.subject || "Not Selected"}</span>
+                <span>{testFormData?.subject}</span>
               </div>
 
               <div>
