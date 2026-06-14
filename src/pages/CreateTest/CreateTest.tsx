@@ -1,5 +1,4 @@
-import { Card, Form, Input, Select, Button, Row, Col, Segmented, 
-         Radio, InputNumber, Typography, Space } from "antd";
+import { Card, Form, Input, Select, Button, Row, Col, Segmented, Radio, InputNumber, Typography, Space, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import Dashboardlayout from "../../components/DashboardLayout/Dashboardlayout";
 import ChapterWiseMCQ from "../ChapterWise/ChapterWiseMCQ";
@@ -23,6 +22,12 @@ export default function CreateTest() {
     handleQuestionsChange,
     handleNext,
     handlePublish,
+    subjects,
+    subTopics,
+    topics,
+    subjectsLoading,
+    topicsLoading,
+    subTopicsLoading
   } = useCreateTest();
 
   const isChapterWiseStep = step === 2 && testType === "chapterwise";
@@ -56,8 +61,27 @@ export default function CreateTest() {
     navigate("/dashboard");
   };
 
-  const selectedKey = isChapterWiseStep && selectedQuestionId 
-    ? `question-${selectedQuestionId}` 
+  const TEST_TYPE_OPTIONS = [
+    { label: "Chapter Wise", value: "chapterwise" },
+    { label: "PYQ", value: "pyq" },
+    { label: "Mock Test", value: "mock" },
+  ];
+
+  const renderLoadingContent = (
+    loading: boolean,
+    text: string
+  ) =>
+    loading ? (
+      <div className="loading-wrapper">
+        <Spin size="small" />
+        <div className="loading-text">{text}</div>
+      </div>
+    ) : (
+      "No Data"
+    );
+
+  const selectedKey = isChapterWiseStep && selectedQuestionId
+    ? `question-${selectedQuestionId}`
     : "/create-test";
 
   return (
@@ -74,7 +98,7 @@ export default function CreateTest() {
           <>
             <div className="breadcrumb-header" style={{ marginBottom: 13 }}>
               <div className="chapter-breadcrumb">
-                <span>Test Creation / Create Test / 
+                <span>Test Creation / Create Test /
                   <span className="active-text">
                     {testType === "chapterwise" ? "Chapter Wise" : testType === "pyq" ? "PYQ" : "Mock Test"}
                   </span>
@@ -89,11 +113,7 @@ export default function CreateTest() {
             <Segmented
               value={testType}
               onChange={(value) => setTestType(value as string)}
-              options={[
-                { label: "Chapter Wise", value: "chapterwise" },
-                { label: "PYQ", value: "pyq" },
-                { label: "Mock Test", value: "mock" },
-              ]}
+              options={TEST_TYPE_OPTIONS}
               className="violet-segmented"
               disabled={isEditMode && questions.length > 0}
               style={{ marginBottom: 10 }}
@@ -103,12 +123,22 @@ export default function CreateTest() {
               <Row gutter={20}>
                 <Col xs={24} md={12}>
                   <Form.Item label="Subject" required>
-                    <Select size="large" placeholder="Select Subject" value={formData.subject}
-                      onChange={(v) => handleFormFieldChange("subject", v)}>
-                      {["English", "Mathematics", "Science", "Social Studies"].map(s => 
-                        <Select.Option key={s.toLowerCase()} value={s.toLowerCase()}>{s}</Select.Option>
+                    <Select
+                      size="large"
+                      placeholder="Select Subject"
+                      value={formData.subject}
+                      loading={subjectsLoading}
+                      disabled={isEditMode}
+                      notFoundContent={renderLoadingContent(
+                        subjectsLoading,
+                        "Waiting for data..."
                       )}
-                    </Select>
+                      onChange={(v) => handleFormFieldChange("subject", v)}
+                      options={subjects.map((s) => ({
+                        label: s.name,
+                        value: s.id,
+                      }))}
+                    />
                   </Form.Item>
                 </Col>
 
@@ -123,22 +153,42 @@ export default function CreateTest() {
                   <>
                     <Col xs={24} md={12}>
                       <Form.Item label="Topic" required>
-                        <Select size="large" placeholder="Select Topic" value={formData.topic}
-                          onChange={(v) => handleFormFieldChange("topic", v)}>
-                          {["Grammar", "Vocabulary", "Reading Comprehension"].map(t =>
-                            <Select.Option key={t.toLowerCase()} value={t.toLowerCase()}>{t}</Select.Option>
+                        <Select
+                          size="large"
+                          placeholder="Select Topic"
+                          value={formData.topic}
+                          loading={topicsLoading}
+                          disabled={!formData.subject || isEditMode}
+                          notFoundContent={renderLoadingContent(
+                            topicsLoading,
+                            "Waiting for topics..."
                           )}
-                        </Select>
+                          onChange={(v) => handleFormFieldChange("topic", v)}
+                          options={topics.map((t) => ({
+                            label: t.name,
+                            value: t.id,
+                          }))}
+                        />
                       </Form.Item>
                     </Col>
                     <Col xs={24} md={12}>
                       <Form.Item label="Sub Topic">
-                        <Select size="large" placeholder="Select Sub Topic" value={formData.subTopic}
-                          onChange={(v) => handleFormFieldChange("subTopic", v)}>
-                          {["Tenses", "Parts of Speech", "Active Passive"].map(s =>
-                            <Select.Option key={s.toLowerCase()} value={s.toLowerCase()}>{s}</Select.Option>
+                        <Select
+                          size="large"
+                          placeholder="Select Sub Topic"
+                          value={formData.subTopic}
+                          loading={subTopicsLoading}
+                          disabled={!formData.topic || isEditMode} 
+                          notFoundContent={renderLoadingContent(
+                            subTopicsLoading,
+                            "Waiting for sub topics..."
                           )}
-                        </Select>
+                          onChange={(v) => handleFormFieldChange("subTopic", v)}
+                          options={subTopics.map((s) => ({
+                            label: s.name,
+                            value: s.id,
+                          }))}
+                        />
                       </Form.Item>
                     </Col>
                   </>
@@ -172,7 +222,7 @@ export default function CreateTest() {
                 {testType === "mock" && (
                   <Col xs={24} md={12}>
                     <Form.Item label="Questions Count" required>
-                      <InputNumber size="large" style={{ width: "100%" }} placeholder="Enter Question Count"
+                      <InputNumber size="large" className="full-width" placeholder="Enter Question Count"
                         value={formData.questionsCount} onChange={(v) => handleFormFieldChange("questionsCount", v)} />
                     </Form.Item>
                   </Col>
@@ -180,14 +230,14 @@ export default function CreateTest() {
 
                 <Col xs={24} md={12}>
                   <Form.Item label="Duration (Minutes)" required>
-                    <InputNumber size="large" style={{ width: "100%" }} placeholder="Enter Duration"
+                    <InputNumber size="large" className="full-width" placeholder="Enter Duration" 
                       value={formData.duration} onChange={(v) => handleFormFieldChange("duration", v)} />
                   </Form.Item>
                 </Col>
 
                 <Col xs={24} md={12}>
                   <Form.Item label="Test Difficulty Level">
-                    <Radio.Group value={formData.difficultyLevel} onChange={(e) => handleFormFieldChange("difficultyLevel", e.target.value)}>
+                    <Radio.Group value={formData.difficultyLevel} onChange={(e) => handleFormFieldChange("difficultyLevel", e.target.value)}  disabled={isEditMode}>
                       <Radio value="easy">Easy</Radio>
                       <Radio value="medium">Medium</Radio>
                       <Radio value="hard">Difficult</Radio>
@@ -199,20 +249,20 @@ export default function CreateTest() {
               <h4 style={{ marginBottom: 10 }}>Marking Scheme :</h4>
               <Row gutter={20}>
                 <Col xs={24} md={4}>
-                  <Form.Item label="Wrong Answer">
-                    <InputNumber size="large" style={{ width: "100%" }} placeholder="-1"
+                  <Form.Item label="Wrong Answer" >
+                    <InputNumber size="large" className="full-width" placeholder="-1"  disabled={isEditMode}
                       value={formData.wrongAnswerMarks} onChange={(v) => handleFormFieldChange("wrongAnswerMarks", v)} />
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={4}>
                   <Form.Item label="Unattempted">
-                    <InputNumber size="large" style={{ width: "100%" }} placeholder="0"
+                    <InputNumber size="large" className="full-width" placeholder="0"  disabled={isEditMode}
                       value={formData.unattemptedMarks} onChange={(v) => handleFormFieldChange("unattemptedMarks", v)} />
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={4}>
                   <Form.Item label="Correct Answer">
-                    <InputNumber size="large" style={{ width: "100%" }} placeholder="+4"
+                    <InputNumber size="large" className="full-width" placeholder="+4"  disabled={isEditMode}
                       value={formData.correctAnswerMarks} onChange={(v) => handleFormFieldChange("correctAnswerMarks", v)} />
                   </Form.Item>
                 </Col>
@@ -230,10 +280,10 @@ export default function CreateTest() {
                 </Col>
               </Row>
 
-              <div style={{ textAlign: "right", marginTop: 10 }}>
+              <div className="action-btn">
                 <Space>
-                  <Button className='create-btn-c1' size="large" style={{ width: 120 }} onClick={handleCancel}>Cancel</Button>
-                  <Button type="primary" className="create-btn" size="large" style={{ width: 120 }} onClick={handleNext}>
+                  <Button className='create-btn-c1 btn-width' size="large" onClick={handleCancel}>Cancel</Button>
+                  <Button type="primary" className="create-btn btn-width" size="large" onClick={handleNext} loading={loading}>
                     {isEditMode ? "Save Change" : "Next"}
                   </Button>
                 </Space>

@@ -7,11 +7,11 @@
 }
 
 .custom-menu .ant-menu-item .ant-menu-item-icon {
-  display: inline-flex !important;
-  margin: 0 !important;
+  display: inline-flex;
+  margin: 0;
 }
 
-.custom-menu .ant-menu-item .ant-menu-title-content {
+.custom-menu .ant-menu-item .ant-menu-title-content+span {
   display: inline-block !important;
   margin: 0 !important;
 }
@@ -34,8 +34,7 @@
 .create-btn{
   background-color: var(--purple-color);
 }
-.create-btn.ant-btn:hover,
-.create-btn.ant-btn:focus {
+.create-btn:is(:hover, :focus) {
   background: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
   color: #fff !important;
@@ -58,4 +57,31 @@
   background-color: #fff;
   border: 1px solid #eeeff1;
   padding:3px;
+}
+.btn-width {
+  width: 120px;
+}
+.action-btn {
+  text-align: right;
+  margin-top: 10px;
+}
+.full-width {
+  width: 100%;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.loading-wrapper {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.loading-text {
+  margin-top: 5px;
 }

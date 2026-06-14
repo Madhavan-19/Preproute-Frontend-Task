@@ -1,14 +1,11 @@
 .login-page {
   display: flex;
   height: 100vh;
-  overflow: hidden;
   background: #f7fbff;
 }
-
 /* Left Section */
 .left-section {
   flex: 1;
-  background: #f7fbff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,22 +90,16 @@
   font-size: 12px;
 }
 
-.login-button.ant-btn {
-  background: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
-  color: #fff !important;
-
-  height: 38px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
-}
-
+.login-button.ant-btn,
 .login-button.ant-btn:hover,
 .login-button.ant-btn:focus {
   background: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
   color: #fff !important;
+  height: 38px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
 }
 
 /* Tablet */

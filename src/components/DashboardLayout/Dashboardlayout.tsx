@@ -1,8 +1,9 @@
-import {Layout,Menu,Avatar,Badge,Dropdown,Typography} from "antd";
-import { DashboardOutlined, PlusSquareOutlined, SearchOutlined,UserOutlined, LogoutOutlined, SettingOutlined, BarChartOutlined, FileTextOutlined, BookOutlined, FolderOpenOutlined,DoubleRightOutlined} from "@ant-design/icons";
-import {useNavigate,useLocation} from "react-router-dom";
+import { Layout, Menu, Avatar, Badge, Dropdown, Typography } from "antd";
+import { DashboardOutlined, PlusSquareOutlined, SearchOutlined, UserOutlined, LogoutOutlined, SettingOutlined, BarChartOutlined, FileTextOutlined, BookOutlined, FolderOpenOutlined, DoubleRightOutlined } from "@ant-design/icons";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import "./DashboardLayout.css";
+//images & logo
 import logo from "../../assets/images/Preproute-logo.png";
 import avator from "../../assets/images/Avator.png"
 import notify from "../../assets/icons/Vector.svg"
@@ -32,9 +33,9 @@ interface DashboardLayoutProps {
   selectedCustomKey?: string;
   showOriginalMenu?: boolean;
   sidebarMenuClassName?: string;
-  totalQuestionsCount?: number; 
+  totalQuestionsCount?: number;
 }
-
+const user = JSON.parse(localStorage.getItem("user") || "{}");
 export default function DashboardLayout({
   children,
   style,
@@ -42,7 +43,7 @@ export default function DashboardLayout({
   customSidebarItems,
   onCustomSidebarItemClick,
   selectedCustomKey,
-    totalQuestionsCount,
+  totalQuestionsCount,
 }: DashboardLayoutProps) {
   const navigate = useNavigate();
 
@@ -128,7 +129,7 @@ export default function DashboardLayout({
 
       <Header className="top-navbar">
         <div className="navbar-left">
-         
+
 
           <img
             src={logo}
@@ -138,18 +139,18 @@ export default function DashboardLayout({
         </div>
 
         <div className="navbar-right">
-         
-            <div className="notification-box">
-                <Badge 
-                  dot
-                  offset={[-3, 2]}  // Adjust position as needed
-                   style={{ backgroundColor: '#0c9d61' }}  // Green color
-                   size="medium"
-                 >
-              <img src={notify} style={{width:'15px'}}/>
-              </Badge>
-            </div>
-          
+
+          <div className="notification-box">
+            <Badge
+              dot
+              offset={[-3, 2]}  // Adjust position as needed
+              style={{ backgroundColor: '#0c9d61' }}  // Green color
+              size="medium"
+            >
+              <img src={notify} style={{ width: '15px' }} />
+            </Badge>
+          </div>
+
 
           <Dropdown
             menu={profileMenu}
@@ -163,16 +164,11 @@ export default function DashboardLayout({
               />
 
               <div className="profile-info">
-                <Text strong>
-                  Admin User
-                </Text>
-
-                <Text type="secondary">
-                  Administrator
-                </Text>
+                <Text strong>{user.name || "Admin User"}</Text>
+                <Text type="secondary">{user.role || 'Administrator'}</Text>
               </div>
 
-            <img src={aero}/>
+              <img src={aero} />
             </div>
           </Dropdown>
         </div>
@@ -236,56 +232,56 @@ export default function DashboardLayout({
                   selectedKeys={[selectedKey]}
                   onClick={handleMenuClick}
                   className="icon-menu"
-                 items={[
-  {
-    key: "/dashboard",
-    icon: <DashboardOutlined />,
-    label: "",
-  },
+                  items={[
+                    {
+                      key: "/dashboard",
+                      icon: <DashboardOutlined />,
+                      label: "",
+                    },
 
-  {
-    key: "/create-test",
-    icon: <PlusSquareOutlined />,
-    label: "",
-  },
+                    {
+                      key: "/create-test",
+                      icon: <PlusSquareOutlined />,
+                      label: "",
+                    },
 
-  {
-    key: "/test-tracking",
-    icon: <SearchOutlined />,
-    label: "",
-  },
+                    {
+                      key: "/test-tracking",
+                      icon: <SearchOutlined />,
+                      label: "",
+                    },
 
-  {
-    key: "/analytics",
-    icon: <BarChartOutlined />,
-    label: "",
-  },
+                    {
+                      key: "/analytics",
+                      icon: <BarChartOutlined />,
+                      label: "",
+                    },
 
-  {
-    key: "/notes",
-    icon: <FileTextOutlined />,
-    label: "",
-  },
+                    {
+                      key: "/notes",
+                      icon: <FileTextOutlined />,
+                      label: "",
+                    },
 
-  {
-    key: "/chapters",
-    icon: <BookOutlined />,
-    label: "",
-  },
+                    {
+                      key: "/chapters",
+                      icon: <BookOutlined />,
+                      label: "",
+                    },
 
-  {
-    key: "/settings",
-    icon: <SettingOutlined />,
-    label: "",
-  },
+                    {
+                      key: "/settings",
+                      icon: <SettingOutlined />,
+                      label: "",
+                    },
 
-  {
-    key: "/files",
-    icon: <FolderOpenOutlined />,
-    label: "",
-  },
-]}
-    />
+                    {
+                      key: "/files",
+                      icon: <FolderOpenOutlined />,
+                      label: "",
+                    },
+                  ]}
+                />
 
                 {/* RIGHT QUESTIONS */}
 
@@ -294,10 +290,10 @@ export default function DashboardLayout({
                     <span>
                       Questions
                     </span>
-                    <DoubleRightOutlined style={{marginLeft:'100px'}} />
+                    <DoubleRightOutlined style={{ marginLeft: '100px' }} />
                   </div>
                   <span>Total Questions: {totalQuestions}</span>
-                   
+
                   <Menu
                     mode="inline"
                     selectedKeys={[
@@ -320,11 +316,10 @@ export default function DashboardLayout({
         {/* CONTENT  */}
 
         <Content
-          className={`content-area ${
-            hideSidebar
+          className={`content-area ${hideSidebar
               ? "full-width"
               : ""
-          }`}
+            }`}
           style={style}
         >
           {children}
