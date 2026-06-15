@@ -12,6 +12,7 @@ import {
   Modal,
   Tooltip,
   Spin, 
+  Segmented
 } from "antd";
 import {
   DeleteOutlined,
@@ -204,31 +205,6 @@ export default function ChapterWiseMCQ({
     setQuestions(updated);
     setCurrentIndex(updated.length - 1);
     message.success(`Question ${updated.length} added. ${maxQuestions - updated.length} remaining.`);
-  };
-
-  // Delete question
-  const deleteQuestion = () => {
-    if (questions.length === 1) {
-      message.warning("Minimum one question required");
-      return;
-    }
-
-    Modal.confirm({
-      title: "Delete Question?",
-      content: "This action cannot be undone",
-      okText: "Delete",
-      okButtonProps: { danger: true },
-      onOk: () => {
-        const updated = questions.filter((_, index) => index !== currentIndex);
-        setQuestions(updated);
-        if (currentIndex >= updated.length) {
-          setCurrentIndex(updated.length - 1);
-        } else {
-          setCurrentIndex(currentIndex);
-        }
-        message.success("Question Deleted");
-      },
-    });
   };
 
   // Clear current question
@@ -510,12 +486,17 @@ if (pageLoading) {
       <div className="breadcrumb-header">
         <div className="chapter-breadcrumb">
           <span>Test Creation</span>
+          {!showPublishScreen  && (
+            <>
           <span className="slash">/</span>
           <span>Create Test</span>
           <span className="slash">/</span>
           <span className="active-text">Chapter Wise</span>
+          </>
+          )}
         </div>
-
+   
+{!showPublishScreen  && (
        <Button 
   type="primary" 
   className="publish-btn" 
@@ -524,8 +505,27 @@ if (pageLoading) {
 >
   Publish Test
 </Button>
-      </div>
+)}
 
+      </div>
+      {showPublishScreen && (
+      <div className="test-status-section">
+        <Space size="large" align="center">
+          <div className="test-created">
+            
+            <Text strong style={{ marginLeft: '8px', fontSize: '16px' }}>
+              Test created
+            </Text>
+          </div>
+          
+          <div className="questions-status">
+            <Tag color="green" style={{ fontSize: '14px', padding: '4px 12px',background:'white',border:'1px solid #52c41a',borderRadius:'10px',margin:'10px' }}>
+             <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '16px' }} /> All 50 Questions done
+            </Tag>
+          </div>
+        </Space>
+      </div>
+    )}
       {/* TOP CARD - Displaying Form Data with Edit Button */}
       <Card className="chapter-info-card">
         <div className="chapter-badge">Chapter Wise</div>
@@ -635,7 +635,7 @@ if (pageLoading) {
             Question {currentIndex + 1} / {questions.length}
           </Title>
           <Button type="link" danger icon={<DeleteOutlined />} className="delete-btn" onClick={clearQuestion}>
-            Clear Question
+            Delete All Edits
           </Button>
         </div>
 
@@ -721,7 +721,7 @@ if (pageLoading) {
 
         <div className="settings-grid">
           <div>
-            <Text className="label">Difficulty Level</Text>
+            <Text className="label">Level of Difficulty</Text>
             <Select
              key={`difficulty-${currentQuestion.id}`}
               size="large"
@@ -763,18 +763,12 @@ if (pageLoading) {
 
       {/* FOOTER BUTTONS */}
       <div className="footer-buttons">
-        <Button danger onClick={onBack}>
+        <Button danger onClick={onBack} className="exit-chap">
           Exit Test Creation
         </Button>
 
         <Space>
-          <Button onClick={deleteQuestion}>Delete Question</Button>
-          <Button 
-            onClick={addQuestion}
-            disabled={questions.length >= maxQuestions}
-          >
-            Add Question
-          </Button>
+          
           <Button type="primary" icon={<SaveOutlined />} onClick={saveQuestion}>
             Save Question
           </Button>
@@ -791,20 +785,23 @@ if (pageLoading) {
 
 
   {/* Segmented Publish Type Buttons */}
-  <div className="publish-type-wrapper">
-    <button 
-      className={`publish-type-btn ${publishType === 'now' ? 'active' : ''}`}
-      onClick={() => setPublishType('now')}
-    >
-      Publish Now
-    </button>
-    <button 
-      className={`publish-type-btn ${publishType === 'schedule' ? 'active' : ''}`}
-      onClick={() => setPublishType('schedule')}
-    >
-      Schedule Publish
-    </button>
-  </div>
+  {/* <div className="publish-type-wrapper"> */}
+ <Segmented
+  value={publishType}
+  onChange={(value) => setPublishType(value as 'now' | 'schedule')}
+  options={[
+    {
+      label: "Publish Now",
+      value: "now",
+    },
+    {
+      label: "Schedule Publish",
+      value: "schedule",
+    },
+  ]}
+  className="publish-segmented"
+/>
+  {/* </div> */}
 
   {/* Schedule Publish Section - Shows only when schedule is selected */}
   {publishType === 'schedule' && (
