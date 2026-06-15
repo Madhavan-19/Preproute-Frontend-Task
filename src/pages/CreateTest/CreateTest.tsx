@@ -33,19 +33,19 @@ export default function CreateTest() {
 
   const isChapterWiseStep = step === 2 && testType === "chapterwise";
 
-  const getQuestionSidebarItems = () => {
-    if (!isChapterWiseStep || !questions.length) return [];
-    return questions.map((_, idx) => ({
-      key: `question-${idx}`,
-      icon: <CheckOutlined />,
-      label: (
-        <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-          <span>Question {idx + 1}</span>
-          <DoubleRightOutlined className="question-arrow" />
-        </div>
-      ),
-    }));
-  };
+const getQuestionSidebarItems = () => {
+  if (!isChapterWiseStep || !questions.length) return [];
+  return questions.map((q, idx) => ({
+    key: `question-${q.id}`,  // FIXED: Use actual question ID
+    icon: <CheckOutlined />,
+    label: (
+      <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+        <span>Question {idx + 1}</span>
+        <DoubleRightOutlined className="question-arrow" />
+      </div>
+    ),
+  }));
+};
 
   const handleBackFromMCQ = () => {
     setStep(1);
@@ -88,7 +88,11 @@ export default function CreateTest() {
   return (
     <Dashboardlayout
       customSidebarItems={getQuestionSidebarItems()}
-      onCustomSidebarItemClick={(key) => setSelectedQuestionId(key.replace("question-", ""))}
+       onCustomSidebarItemClick={(key) => {
+    const questionId = key.replace("question-", "");
+    setSelectedQuestionId(questionId);
+    console.log("Selected question ID:", questionId); // Debug
+  }}
       selectedCustomKey={selectedKey}
       sidebarMenuClassName={isChapterWiseStep && questions.length > 0 ? "question-menu-green" : undefined}
       showOriginalMenu={true}

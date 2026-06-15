@@ -11,6 +11,7 @@ import {
   message,
   Modal,
   Tooltip,
+  Spin, 
 } from "antd";
 import {
   DeleteOutlined,
@@ -28,7 +29,8 @@ import {
 import { useLocation } from "react-router-dom";
 import "./ChapterWiseMCQ.css";
 import type { TestFormData, Question } from "../CreateTest/Create.types";
-import Chapter_1 from '../../assets/icons/chapter-1.svg'
+import Chapter_1 from '../../assets/icons/chapter-1.svg';
+import axiosInstance from "../../api/axiosConfig"; 
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -50,14 +52,16 @@ export default function ChapterWiseMCQ({
   selectedQuestionId,
   onPublish,
   testFormData: propTestFormData,
+    testId,
   onEditTestDetails,
 }: Props) {
   const location = useLocation();
   const [testFormData, setTestFormData] = useState(propTestFormData);
   const [showPublishScreen, setShowPublishScreen] = useState(false);
+  const [pageLoading, setPageLoading] = useState(false); 
   const [questions, setQuestions] = useState<Question[]>([
     {
-      id: 1,
+      id: Date.now(),
       text: "",
       options: ["", "", "", ""],
       correctAnswer: "",
@@ -162,11 +166,16 @@ export default function ChapterWiseMCQ({
   };
 
   // Update option
-  const updateOption = (optionIndex: number, value: string) => {
-    const updated = [...questions];
-    updated[currentIndex].options[optionIndex] = value;
-    setQuestions(updated);
+ const updateOption = (optionIndex: number, value: string) => {
+  const updated = [...questions];
+  const updatedOptions = [...updated[currentIndex].options];
+  updatedOptions[optionIndex] = value;
+  updated[currentIndex] = {
+    ...updated[currentIndex],
+    options: updatedOptions,
   };
+  setQuestions(updated);
+};
 
   // Add question - Check limit
   const addQuestion = () => {
@@ -372,6 +381,59 @@ const handleConfirmPublish = () => {
   message.success("Test Published Successfully!");
   onPublish?.(questions);
 };
+
+useEffect(() => {
+  const fetchTestData = async () => {
+    if (testId) {
+      setPageLoading(true);
+      try {
+        const response = await axiosInstance.get(`/tests/${testId}`);
+        console.log('Fetched test data:', response);
+        
+        if (response.data && response.data.status === "success") {
+          const testData = response.data.data;
+          
+          // Update form data with fetched values
+          const fetchedFormData: TestFormData = {
+            testName: testData.name || "",
+            subject: testData.subject || "",
+            topic: testData.topics?.[0] || "",
+            subTopic: testData.sub_topics?.[0] || "",
+            difficultyLevel: testData.difficulty || "easy",
+            duration: testData.total_time || 0,
+            totalMarks: testData.total_marks || 0,
+            questionsCount: testData.total_questions || 0,
+            noOfQuestions: testData.total_questions || 0,
+          };
+          
+          setTestFormData(fetchedFormData);
+          
+          if (testData.total_questions) {
+            setMaxQuestions(testData.total_questions);
+          }
+          
+          message.success("Test data loaded successfully!");
+        }
+      } catch (error) {
+        console.error('Failed to fetch test data:', error);
+        message.error('Failed to load test data');
+      } finally {
+        setPageLoading(false);
+      }
+    }
+  };
+  
+  fetchTestData();
+}, [testId]);
+
+if (pageLoading) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Spin size="large" />
+      <Text style={{ marginLeft: 16 }}>Loading test data...</Text>
+    </div>
+  );
+}
   return (
     <div className="chapter-mcq-page">
       {/* HEADER */}
@@ -520,7 +582,7 @@ const handleConfirmPublish = () => {
       </div>
 
       {/* QUESTION EDITOR */}
-      <div className="editor-container">
+     <div className="editor-container" key={`editor-${currentQuestion.id}`}>
         <div className="toolbar">
           <span>B</span>
           <span>I</span>
@@ -530,6 +592,7 @@ const handleConfirmPublish = () => {
         </div>
 
         <TextArea
+          key={`question-text-${currentQuestion.id}`}
           rows={7}
           placeholder="Type your question here..."
           value={currentQuestion.text}
@@ -539,14 +602,14 @@ const handleConfirmPublish = () => {
       </div>
 
       {/* OPTIONS */}
-      <div className="options-wrapper">
+      <div className="options-wrapper" key={`options-${currentQuestion.id}`}>
         <Text className="options-title">Type the options below</Text>
 
-        {currentQuestion.options.map((option, index) => (
-          <div className="option-item" key={index}>
+      {currentQuestion.options.map((option, index) => (
+  <div className="option-item" key={`${currentQuestion.id}-option-${index}`}>
             <input
               type="radio"
-              name="correctAnswer"
+               name={`correctAnswer-${currentQuestion.id}`}
               checked={currentQuestion.correctAnswer === option}
               onChange={() => updateQuestion("correctAnswer", option)}
               disabled={!option.trim()}
@@ -569,6 +632,7 @@ const handleConfirmPublish = () => {
       <div className="solution-section">
         <Text className="solution-title">Add Solution</Text>
         <TextArea
+         key={`solution-${currentQuestion.id}`}
           rows={5}
           placeholder="Type the solution explanation here..."
           value={currentQuestion.solution}
@@ -584,6 +648,7 @@ const handleConfirmPublish = () => {
           <div>
             <Text className="label">Difficulty Level</Text>
             <Select
+             key={`difficulty-${currentQuestion.id}`}
               size="large"
               style={{ width: "100%" }}
               placeholder="Select difficulty"
@@ -600,6 +665,7 @@ const handleConfirmPublish = () => {
           <div>
             <Text className="label">Topic</Text>
             <Input
+            key={`topic-${currentQuestion.id}`}
               size="large"
               value={currentQuestion.topic}
               onChange={(e) => updateQuestion("topic", e.target.value)}
@@ -610,6 +676,7 @@ const handleConfirmPublish = () => {
           <div>
             <Text className="label">Sub Topic</Text>
             <Input
+            key={`subtopic-${currentQuestion.id}`}
               size="large"
               value={currentQuestion.subTopic}
               onChange={(e) => updateQuestion("subTopic", e.target.value)}

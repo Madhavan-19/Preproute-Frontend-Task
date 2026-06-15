@@ -33,7 +33,6 @@ export const createBulkQuestionsApi = async (questions: any[]) => {
 };
 
 // Publish Test API
-// Publish Test API
 export const publishTestApi = async (testId: string, payload?: any) => {
   return axiosInstance.put(`/tests/${testId}`, payload || { status: "live" });
 };

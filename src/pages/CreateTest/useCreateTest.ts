@@ -129,11 +129,17 @@ export const useCreateTest = () => {
     if (isEditMode && testId) {
       const payload = {
         name: formData.testName,
+        type: testType,
+        subject: formData.subject, 
+        topics: formData.topic ? [formData.topic] : [],
+        sub_topics: formData.subTopic ? [formData.subTopic] : [],
         total_time: formData.duration || 0,
         difficulty: formData.difficultyLevel || "easy",
         correct_marks: formData.correctAnswerMarks || 0,
         wrong_marks: formData.wrongAnswerMarks || 0,
         unattempt_marks: formData.unattemptedMarks || 0,
+        total_marks: formData.totalMarks || 0,
+        total_questions: formData.noOfQuestions || 0,
         status: "draft",
       };
       try {
@@ -221,6 +227,10 @@ export const useCreateTest = () => {
     setLoading(true);
     const payload = {
       name: formData.testName,
+      type: testType,  
+      subject: formData.subject, 
+      topics: formData.topic ? [formData.topic] : [],
+      sub_topics: formData.subTopic ? [formData.subTopic] : [],
       total_time: formData.duration || 0,
       difficulty: formData.difficultyLevel || "easy",
       correct_marks: formData.correctAnswerMarks || 0,
@@ -228,6 +238,7 @@ export const useCreateTest = () => {
       unattempt_marks: formData.unattemptedMarks || 0,
       total_questions: finalQuestions.length,
       total_marks: (formData.correctAnswerMarks || 0) * finalQuestions.length,
+      questions: finalQuestions, 
       status: "published"
     };
 
