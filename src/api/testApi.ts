@@ -29,7 +29,7 @@ export const getTestById = (id: string) => {
 
 // Bulk Create Questions API
 export const createBulkQuestionsApi = async (questions: any[]) => {
-  return axiosInstance.post("/questions/bulk", { questions });
+  return await axiosInstance.post("/questions/bulk", { questions });
 };
 
 // Publish Test API

@@ -31,6 +31,7 @@ import "./ChapterWiseMCQ.css";
 import type { TestFormData, Question } from "../CreateTest/Create.types";
 import Chapter_1 from '../../assets/icons/chapter-1.svg';
 import axiosInstance from "../../api/axiosConfig"; 
+import { createBulkQuestionsApi, publishTestApi } from "../../api/testApi";
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -345,7 +346,7 @@ export default function ChapterWiseMCQ({
     message.success('CSV exported successfully!');
   };
 
-  const [publishType, setPublishType] = useState<'now' | 'schedule'>('now');
+const [publishType, setPublishType] = useState<'now' | 'schedule'>('now');
 const [scheduleDate, setScheduleDate] = useState('');
 const [scheduleTime, setScheduleTime] = useState('');
 const [liveUntil, setLiveUntil] = useState('always');
@@ -354,13 +355,13 @@ const [customEndTime, setCustomEndTime] = useState('');
 const [startDate, setStartDate] = useState('');
 const [startTime, setStartTime] = useState('');
 
-const handleConfirmPublish = () => {
+const handleConfirmPublish = async () => {
+  // Validation for dates (same as before)
   if (publishType === 'now') {
     if (!startDate || !startTime) {
       message.error('Please select both start date and time');
       return;
     }
-    message.success(`Test published from ${startDate} at ${startTime}`);
   }
   
   if (publishType === 'schedule') {
@@ -368,7 +369,6 @@ const handleConfirmPublish = () => {
       message.error('Please select both date and time for scheduled publish');
       return;
     }
-    message.success(`Test scheduled for ${scheduleDate} at ${scheduleTime}`);
   }
   
   if (liveUntil === 'custom') {
@@ -377,11 +377,81 @@ const handleConfirmPublish = () => {
       return;
     }
   }
-  
-  message.success("Test Published Successfully!");
-  onPublish?.(questions);
-};
 
+  setPageLoading(true);
+  
+  try {
+    // Remove solution field from payload
+    const questionsPayload = questions.map(q => {
+      const correctOptionIndex = q.options.findIndex(opt => opt === q.correctAnswer);
+      const correctOption = `option${correctOptionIndex + 1}`;
+      
+      const questionData = {
+        type: "mcq",
+        question: q.text,
+        option1: q.options[0] || "",
+        option2: q.options[1] || "",
+        option3: q.options[2] || "",
+        option4: q.options[3] || "",
+        correct_option: correctOption,
+        difficulty: q.difficulty || 'easy',
+        topic: q.topic || testFormData?.topic || "",
+        sub_topic: q.subTopic || testFormData?.subTopic || "",
+        subject: testFormData?.subject || "",
+      };
+      
+      return questionData;
+    });
+
+    console.log('Sending payload:', JSON.stringify(questionsPayload, null, 2));
+
+    const bulkResponse = await createBulkQuestionsApi(questionsPayload);
+    
+    if (bulkResponse.data.status === "success") {
+      const questionIds = bulkResponse.data.data.map((q: any) => q.id);
+      
+      // CHANGE: status from "published" to "live"
+      const publishPayload = {
+        status: "live",  // ← Changed from "published" to "live"
+        publish_type: publishType,
+        ...(publishType === 'now' && {
+          start_date: startDate,
+          start_time: startTime
+        }),
+        ...(publishType === 'schedule' && {
+          scheduled_date: scheduleDate,
+          scheduled_time: scheduleTime
+        }),
+        live_until: liveUntil,
+        ...(liveUntil === 'custom' && {
+          end_date: customEndDate,
+          end_time: customEndTime
+        }),
+        question_ids: questionIds,
+        total_questions: questions.length,
+        total_marks: (testFormData?.correctAnswerMarks || 4) * questions.length
+      };
+      
+      if (testId) {
+        await publishTestApi(testId, publishPayload);
+        message.success("Test Published Successfully!");
+        onPublish?.(questions);
+        
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 2000);
+      } else {
+        message.error("Test ID not found");
+      }
+    }
+  } catch (error: any) {
+    console.error('Publish failed:', error);
+    console.error('Error response:', error.response?.data);
+    message.error(error.response?.data?.message || "Failed to publish test");
+  } finally {
+    setPageLoading(false);
+  }
+};
 useEffect(() => {
   const fetchTestData = async () => {
     if (testId) {
@@ -446,9 +516,14 @@ if (pageLoading) {
           <span className="active-text">Chapter Wise</span>
         </div>
 
-        <Button type="primary" className="publish-btn" onClick={publishTest}>
-          Publish Test
-        </Button>
+       <Button 
+  type="primary" 
+  className="publish-btn" 
+  onClick={publishTest}
+  loading={pageLoading}
+>
+  Publish Test
+</Button>
       </div>
 
       {/* TOP CARD - Displaying Form Data with Edit Button */}
@@ -854,10 +929,17 @@ if (pageLoading) {
   </div>
 
   {/* Action Buttons */}
-  <div className="publish-actions">
-    <Button size="large" onClick={() => setShowPublishScreen(false)}>Cancel</Button>
-    <Button type="primary" size="large" onClick={handleConfirmPublish}>Confirm</Button>
-  </div>
+<div className="publish-actions">
+  <Button size="large" onClick={() => setShowPublishScreen(false)}>Cancel</Button>
+  <Button 
+    type="primary" 
+    size="large" 
+    onClick={handleConfirmPublish}
+    loading={pageLoading}
+  >
+    Confirm
+  </Button>
+</div>
 </div>
           )}
       </div>
