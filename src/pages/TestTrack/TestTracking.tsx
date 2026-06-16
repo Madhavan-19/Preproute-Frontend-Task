@@ -2,8 +2,18 @@ import DashboardLayout from "../../components/DashboardLayout/Dashboardlayout";
 
 export default function TestTracking() {
   return (
-    <DashboardLayout style={{ fontSize: "24px", marginBottom: "20px" }} >
-    <div>TestTracking</div>
-    </DashboardLayout>
+     <DashboardLayout>
+         <div
+           style={{
+             display: "flex",
+             justifyContent: "center",
+             alignItems: "center",
+             height: "80vh",
+             fontSize: "24px",
+           }}
+         >
+           This Page Not Available
+         </div>
+       </DashboardLayout>
   )
 }

@@ -137,6 +137,12 @@ export default function DashboardLayout({
     return selectedKey;
   };
 
+  const handleQuestionMenuClick = ({ key }: { key: string }) => {
+  if (onCustomSidebarItemClick) {
+    onCustomSidebarItemClick(key);
+  }
+};
+
   return (
     <Layout className="layout-container">
       {/* HEADER  */}
@@ -238,7 +244,7 @@ export default function DashboardLayout({
                 <Menu
                   mode="inline"
                   selectedKeys={[selectedKey]}
-                  onClick={handleMenuClick}
+                  onClick={handleQuestionMenuClick}
                   className="icon-menu"
                   items={[
                     {
