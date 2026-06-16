@@ -1,5 +1,5 @@
 import { Layout, Menu, Avatar, Badge, Dropdown, Typography } from "antd";
-import { DashboardOutlined, PlusSquareOutlined, SearchOutlined, UserOutlined, LogoutOutlined, SettingOutlined, BarChartOutlined, FileTextOutlined, BookOutlined, FolderOpenOutlined, DoubleRightOutlined } from "@ant-design/icons";
+import { DashboardOutlined, PlusSquareOutlined, SearchOutlined, UserOutlined, LogoutOutlined, SettingOutlined, DoubleRightOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import "./DashboardLayout.css";
@@ -8,6 +8,20 @@ import logo from "../../assets/images/Preproute-logo.png";
 import avator from "../../assets/images/Avator.png"
 import notify from "../../assets/icons/Vector.svg"
 import aero from "../../assets/images/Aero.png";
+//icons
+import dash from '../../assets/icons/dash.svg';
+import edit from "../../assets/icons/edit.svg";
+import track from '../../assets/icons/track.svg';
+import chap_1 from '../../assets/icons/approval.svg';
+import chap_2 from "../../assets/icons/Usermanagement.svg";
+import chap_3 from "../../assets/icons/cs.svg";
+import chap_4 from "../../assets/icons/subscription.svg";
+import chap_5 from "../../assets/icons/setting.svg";
+import chap_6 from "../../assets/icons/payment.svg";
+import chap_7 from "../../assets/icons/reward.svg";
+import chap_8 from "../../assets/icons/resources.svg";
+import chap_9 from "../../assets/icons/profile.svg";
+import chap_10 from "../../assets/icons/management.svg";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -196,25 +210,19 @@ export default function DashboardLayout({
                 items={[
                   {
                     key: "/dashboard",
-                    icon: (
-                      <DashboardOutlined />
-                    ),
+                    icon:<img src={dash}/>,
                     label: "Dashboard",
                   },
 
                   {
                     key: "/create-test",
-                    icon: (
-                      <PlusSquareOutlined />
-                    ),
+                    icon :<img src={edit}/>,
                     label: "Create Test",
                   },
 
                   {
                     key: "/test-tracking",
-                    icon: (
-                      <SearchOutlined />
-                    ),
+                    icon :<img src={track}/>,
                     label: "Test Tracking",
                   },
                 ]}
@@ -235,51 +243,92 @@ export default function DashboardLayout({
                   items={[
                     {
                       key: "/dashboard",
-                      icon: <DashboardOutlined />,
+                      icon:<img src={dash}/>,
                       label: "",
                     },
 
                     {
                       key: "/create-test",
-                      icon: <PlusSquareOutlined />,
+                      icon :<img src={edit}/>,
                       label: "",
                     },
 
                     {
                       key: "/test-tracking",
-                      icon: <SearchOutlined />,
+                      icon :<img src={chap_1}/>,
                       label: "",
                     },
 
                     {
                       key: "/analytics",
-                      icon: <BarChartOutlined />,
+                      icon :<img src={chap_8}/>,
                       label: "",
                     },
 
                     {
                       key: "/notes",
-                      icon: <FileTextOutlined />,
+                      icon :<img src={chap_3}/>,
                       label: "",
                     },
 
                     {
                       key: "/chapters",
-                      icon: <BookOutlined />,
+                      icon :<img src={chap_2}/>,
+                      label: "",
+                    },
+                    {
+                      key: "/files",
+                      icon :<img src={chap_9}/>,
+                      label: "",
+                    },
+                    {
+                      key: "/files",
+                      icon :<img src={chap_10}/>,
                       label: "",
                     },
 
                     {
                       key: "/settings",
-                      icon: <SettingOutlined />,
+                      icon :<img src={chap_4}/>,
                       label: "",
                     },
 
                     {
                       key: "/files",
-                      icon: <FolderOpenOutlined />,
+                      icon :<img src={chap_5}/>,
                       label: "",
                     },
+                     {
+                      key: "/files",
+                      icon :<img src={chap_5}/>,
+                      label: "",
+                    },
+                     {
+                      key: "/files",
+                      icon :<img src={chap_4}/>,
+                      label: "",
+                    },
+                     {
+                      key: "/files",
+                      icon :<img src={chap_6}/>,
+                      label: "",
+                    },
+                     {
+                      key: "/files",
+                      icon :<img src={chap_7}/>,
+                      label: "",
+                    },
+                     {
+                      key: "/files",
+                      icon :<img src={notify}/>,
+                      label: "",
+                    },
+                     {
+                      key: "/files",
+                      icon :<img src={chap_5}/>,
+                      label: "",
+                    },
+                    
                   ]}
                 />
 
