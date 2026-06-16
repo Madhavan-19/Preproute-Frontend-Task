@@ -1,12 +1,3 @@
-.chapter-mcq-page {
-  background: #ffffff !important;
-  min-height: 100vh;
-  /* padding: 20px; */
-}
-
-/* =========================
-   BREADCRUMB + PUBLISH
-========================= */
 
 .breadcrumb-header {
   display: flex;
@@ -288,175 +279,15 @@
    MOBILE
 ========================= */
 
-@media (max-width: 768px) {
-  .chapter-top {
-    flex-direction: column;
-  }
 
-  .question-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-  }
-
-  .footer-buttons {
-    flex-direction: column;
-    gap: 14px;
-    align-items: stretch;
-  }
-
-  .breadcrumb-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .publish-btn {
-    width: 100%;
-  }
-}
 /* =========================
    PUBLISH SCREEN STYLES (New)
    ========================= */
 
 .publish-review-page {
- 
   margin: 0 auto;
   padding: 20px 0;
   background: #ffffff;
-}
-
-/* Header Styles */
-.publish-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.publish-header h4.ant-typography {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.success-tag.ant-tag {
-  padding: 4px 16px;
-  font-size: 14px;
-  background: #f0fdf4;
-  border-color: #bbf7d0;
-  color: #16a34a;
-  border-radius: 20px;
-  font-weight: 500;
-  margin: 0;
-}
-
-/* Summary Card */
-.publish-summary-card.ant-card {
-  border-radius: 16px !important;
-  border: 1px solid #e5e7eb !important;
-  margin-bottom: 28px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-  background: #ffffff !important;
-}
-
-.publish-summary-card .ant-card-body {
-  padding: 24px;
-}
-
-.summary-badge {
-  display: inline-block;
-  background: #111827;
-  color: white;
-  padding: 4px 16px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  margin-bottom: 20px;
-  letter-spacing: 0.3px;
-}
-
-.summary-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.summary-row {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.summary-row .ant-typography-secondary {
-  min-width: 80px;
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.summary-row strong {
-  color: #111827;
-  font-size: 14px;
-}
-
-.topic-tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.topic-tags .ant-tag {
-  margin: 0;
-  padding: 4px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-}
-
-/* Stats Row */
-.summary-stats {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 20px 0 8px;
-  border-top: 1px solid #f0f0f0;
-  margin-top: 8px;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.stat-icon {
-  font-size: 28px;
-  color: #722ed1;
-}
-
-.stat-value {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1f2937;
-  line-height: 1.2;
-}
-
-.stat-label {
-  font-size: 12px;
-  color: #9ca3af;
-  margin-top: 2px;
-}
-
-.stat-divider {
-  width: 1px;
-  height: 40px;
-  background: #e5e7eb;
 }
 
 .publish-segmented {
@@ -549,25 +380,7 @@
   width: 100%;
 }
 
-.live-options {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
 
-.live-options .ant-radio-wrapper {
-  font-size: 15px;
-  color: #374151;
-}
-
-.live-options .ant-radio-wrapper:hover .ant-radio-inner {
-  border-color: #722ed1;
-}
-
-.live-options .ant-radio-checked .ant-radio-inner {
-  border-color: #722ed1;
-  background-color: #722ed1;
-}
 
 /* Custom Duration Date Picker */
 .custom-date-wrapper {
@@ -671,29 +484,6 @@
     padding: 16px;
   }
   
-  .publish-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .publish-header h4.ant-typography {
-    font-size: 20px;
-  }
-  
-  .summary-stats {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
-  }
-  
-  .stat-divider {
-    display: none;
-  }
-  
-  .stat-item {
-    justify-content: center;
-  }
-  
   .datetime-picker-wrapper {
     flex-direction: column;
     gap: 16px;
@@ -706,39 +496,10 @@
   
   .publish-actions .ant-btn {
     width: 100%;
-  }
-  
-  .publish-type-wrapper {
-    margin-bottom: 20px;
-  }
-  
-  .publish-type-btn {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-  
+  } 
   .schedule-section,
   .custom-date-wrapper {
     padding: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .summary-row {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .summary-row .ant-typography-secondary {
-    min-width: auto;
-  }
-  
-  .stat-value {
-    font-size: 18px;
-  }
-  
-  .stat-icon {
-    font-size: 24px;
   }
 }
 /* Radio buttons grid layout - 2 columns */
@@ -829,4 +590,124 @@
   background-color: #ff7f7f !important;
   border-color: #ff7f7f !important;
   color: white !important;
+}
+/* Better mobile responsiveness */
+@media (max-width: 768px) {
+  /* Fix chapter meta spacing */
+  .chapter-meta div {
+    flex-wrap: wrap;
+  }
+  
+  /* Fix option items on mobile */
+  .option-item {
+    flex-wrap: wrap;
+  }
+  
+  .option-item input[type="radio"] {
+    order: 0;
+  }
+  
+  .option-item .ant-input {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .delete-option {
+    order: 2;
+  }
+  
+  /* Fix publish screen live options grid */
+  .live-options-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  /* Fix datetime picker on mobile */
+  .datetime-picker-wrapper {
+    flex-direction: column;
+  }
+  
+  /* Fix settings grid */
+  .settings-grid {
+    gap: 16px;
+  }
+  
+  /* Adjust spacing */
+  .chapter-info-card .ant-card-body {
+    padding: 16px;
+  }
+  
+  /* Fix publish actions */
+  .publish-actions {
+    flex-direction: column;
+  }
+  
+  .publish-actions .ant-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further adjustments for very small screens */
+  .chapter-title-row {
+    flex-wrap: wrap;
+  }
+  
+  .chapter-meta > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .option-item {
+    gap: 8px;
+  }
+  
+  .option-item .ant-input {
+    width: calc(100% - 60px);
+  }
+  
+  .footer-buttons {
+    gap: 12px;
+  }
+  
+  .footer-buttons .ant-space {
+    width: 100%;
+  }
+  
+  .footer-buttons .ant-space-item {
+    flex: 1;
+  }
+  
+  .footer-buttons button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .chapter-top {
+    flex-direction: column;
+  }
+
+  .question-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .footer-buttons {
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  .breadcrumb-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .publish-btn {
+    width: 100%;
+  }
 }

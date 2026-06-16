@@ -1,52 +1,15 @@
-import { useEffect, useState } from "react";
-import {
-  Card,
-  Typography,
-  Radio,
-  Tag,
-  Button,
-  Input,
-  Select,
-  Space,
-  message,
-  Modal,
-  Tooltip,
-  Spin, 
-  Segmented
-} from "antd";
-import {
-  DeleteOutlined,
-  PlusOutlined,
-  SaveOutlined,
-  ClockCircleOutlined,
-  FileTextOutlined,
-  TrophyOutlined,
-  EditOutlined,
-  DownloadOutlined,
-    CheckCircleOutlined,
-  ExclamationCircleOutlined,
-  CloseCircleOutlined
-} from "@ant-design/icons";
-import { useLocation } from "react-router-dom";
+import { Card,Typography,Radio,Tag,Button,  Input,Select, Space, Tooltip, Spin, Segmented, DatePicker, TimePicker} from "antd";
+import { DeleteOutlined, PlusOutlined, SaveOutlined, ClockCircleOutlined, FileTextOutlined, TrophyOutlined, EditOutlined, DownloadOutlined, CheckCircleOutlined, ExclamationCircleOutlined, CloseCircleOutlined} from "@ant-design/icons";
 import "./ChapterWiseMCQ.css";
-import type { TestFormData, Question } from "../CreateTest/Create.types";
 import Chapter_1 from '../../assets/icons/chapter-1.svg';
-import axiosInstance from "../../api/axiosConfig"; 
-import { createBulkQuestionsApi, publishTestApi } from "../../api/testApi";
+import { useChapterWiseMCQ } from "./useChapterMCQ";
+import type { ChapterWiseMCQProps } from "./ChapterWiseMCQ.types";
+import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
-interface Props {
-  onBack: () => void;
-  onQuestionsChange?: (questions: Question[]) => void;
-  selectedQuestionId?: string;
-  onPublish?: (questions: Question[]) => void;
-  testFormData?: TestFormData;
-   testId?: string;
-  onEditTestDetails?: () => void;
-  loading?: boolean;
-}
+
 
 export default function ChapterWiseMCQ({
   onBack,
@@ -54,423 +17,34 @@ export default function ChapterWiseMCQ({
   selectedQuestionId,
   onPublish,
   testFormData: propTestFormData,
-    testId,
+  testId,
   onEditTestDetails,
-}: Props) {
-  const location = useLocation();
-  const [testFormData, setTestFormData] = useState(propTestFormData);
-  const [showPublishScreen, setShowPublishScreen] = useState(false);
-  const [pageLoading, setPageLoading] = useState(false); 
-  const [questions, setQuestions] = useState<Question[]>([
-    {
-      id: Date.now(),
-      text: "",
-      options: ["", "", "", ""],
-      correctAnswer: "",
-      solution: "",
-      difficulty: "",
-      topic: propTestFormData?.topic || "",
-      subTopic: propTestFormData?.subTopic || "",
-    },
-  ]);
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [maxQuestions, setMaxQuestions] = useState(20);
-
-  // Get max questions from testFormData
-  useEffect(() => {
-    if (propTestFormData?.questionsCount) {
-      setMaxQuestions(propTestFormData.questionsCount);
-    } else if (propTestFormData?.noOfQuestions) {
-      const noOfQuestions = typeof propTestFormData.noOfQuestions === 'number' 
-        ? propTestFormData.noOfQuestions 
-        : parseInt(propTestFormData.noOfQuestions as string);
-      if (!isNaN(noOfQuestions)) {
-        setMaxQuestions(noOfQuestions);
-      }
-    }
-  }, [propTestFormData]);
-
-  // Check for updated data coming from edit
-  useEffect(() => {
-    if (location.state) {
-      const { updatedFormData, existingQuestions, fromEdit } = location.state as any;
-      
-      if (fromEdit && updatedFormData) {
-        setTestFormData(updatedFormData);
-        message.success("Test details updated successfully!");
-        
-        if (updatedFormData.questionsCount) {
-          setMaxQuestions(updatedFormData.questionsCount);
-        } else if (updatedFormData.noOfQuestions) {
-          const noOfQuestions = typeof updatedFormData.noOfQuestions === 'number' 
-            ? updatedFormData.noOfQuestions 
-            : parseInt(updatedFormData.noOfQuestions as string);
-          if (!isNaN(noOfQuestions)) {
-            setMaxQuestions(noOfQuestions);
-          }
-        }
-        
-        if (existingQuestions && existingQuestions.length > 0) {
-          const updatedQuestions = existingQuestions.map((q: Question) => ({
-            ...q,
-            topic: updatedFormData.topic || q.topic,
-            subTopic: updatedFormData.subTopic || q.subTopic,
-          }));
-          setQuestions(updatedQuestions);
-          onQuestionsChange?.(updatedQuestions);
-        }
-        
-        window.history.replaceState({}, document.title);
-      }
-    }
-  }, [location.state, onQuestionsChange]);
-
-  // Auto-populate topic and subtopic from form data
-  useEffect(() => {
-    if (testFormData) {
-      setQuestions((prev) =>
-        prev.map((q) => ({
-          ...q,
-          topic: testFormData.topic || q.topic,
-          subTopic: testFormData.subTopic || q.subTopic,
-        }))
-      );
-    }
-  }, [testFormData]);
-
-  // Sidebar question click sync
-  useEffect(() => {
-    if (selectedQuestionId) {
-      const index = questions.findIndex((q) => q.id === Number(selectedQuestionId));
-      if (index !== -1 && index !== currentIndex) {
-        setCurrentIndex(index);
-      }
-    }
-  }, [selectedQuestionId, questions, currentIndex]);
-
-  // Send data to parent
-  useEffect(() => {
-    onQuestionsChange?.(questions);
-  }, [questions, onQuestionsChange]);
-
-  const currentQuestion = questions[currentIndex];
-  const remainingQuestions = maxQuestions - questions.length;
-
-  // Update question
-  const updateQuestion = (field: keyof Question, value: any) => {
-    const updated = [...questions];
-    updated[currentIndex] = {
-      ...updated[currentIndex],
-      [field]: value,
-    };
-    setQuestions(updated);
-  };
-
-  // Update option
- const updateOption = (optionIndex: number, value: string) => {
-  const updated = [...questions];
-  const updatedOptions = [...updated[currentIndex].options];
-  updatedOptions[optionIndex] = value;
-  updated[currentIndex] = {
-    ...updated[currentIndex],
-    options: updatedOptions,
-  };
-  setQuestions(updated);
-};
-
-  // Add question - Check limit
-  const addQuestion = () => {
-    if (questions.length >= maxQuestions) {
-      Modal.warning({
-        title: "Maximum Questions Reached",
-        content: `You can only add up to ${maxQuestions} questions for this test.`,
-        okText: "OK",
-      });
-      return;
-    }
-
-    const newQuestion: Question = {
-      id: Date.now(),
-      text: "",
-      options: ["", "", "", ""],
-      correctAnswer: "",
-      solution: "",
-      difficulty: "",
-      topic: testFormData?.topic || "",
-      subTopic: testFormData?.subTopic || "",
-    };
-
-    const updated = [...questions, newQuestion];
-    setQuestions(updated);
-    setCurrentIndex(updated.length - 1);
-    message.success(`Question ${updated.length} added. ${maxQuestions - updated.length} remaining.`);
-  };
-
-  // Clear current question
-  const clearQuestion = () => {
-    Modal.confirm({
-      title: "Clear Question?",
-      content: "This will clear all data for this question",
-      okText: "Clear",
-      onOk: () => {
-        const updated = [...questions];
-        updated[currentIndex] = {
-          ...updated[currentIndex],
-          text: "",
-          options: ["", "", "", ""],
-          correctAnswer: "",
-          solution: "",
-        };
-        setQuestions(updated);
-        message.success("Question Cleared");
-      },
-    });
-  };
-
-  // Save question
-  const saveQuestion = () => {
-    if (!currentQuestion.text.trim()) {
-      message.error("Please enter the question");
-      return;
-    }
-
-    if (currentQuestion.options.some((option) => !option.trim())) {
-      message.error("Please fill all options");
-      return;
-    }
-
-    if (!currentQuestion.correctAnswer) {
-      message.error("Please select the correct answer");
-      return;
-    }
-
-    message.success("Question Saved Successfully!");
-  };
-
-  // Validate all questions
-  const validateAllQuestions = (): boolean => {
-    if (questions.length < maxQuestions) {
-      message.warning(`Please add ${remainingQuestions} more question(s) to reach ${maxQuestions} questions.`);
-      return false;
-    }
-
-    for (let i = 0; i < questions.length; i++) {
-      const q = questions[i];
-      if (!q.text.trim()) {
-        message.error(`Question ${i + 1} has no text`);
-        setCurrentIndex(i);
-        return false;
-      }
-      if (q.options.some((opt) => !opt.trim())) {
-        message.error(`Question ${i + 1} has empty options`);
-        setCurrentIndex(i);
-        return false;
-      }
-      if (!q.correctAnswer) {
-        message.error(`Question ${i + 1} has no correct answer selected`);
-        setCurrentIndex(i);
-        return false;
-      }
-    }
-    return true;
-  };
-
-  // Publish test
-  const publishTest = () => {
-    if (!validateAllQuestions()) {
-      return;
-    }
-     setShowPublishScreen(true);
-  };
-
-  // Handle CSV export
-  const handleExportCSV = () => {
-    const csvData = questions.map((q, idx) => ({
-      "S.No": idx + 1,
-      "Question": q.text,
-      "Option 1": q.options[0],
-      "Option 2": q.options[1],
-      "Option 3": q.options[2],
-      "Option 4": q.options[3],
-      "Correct Answer": q.correctAnswer,
-      "Solution": q.solution,
-      "Difficulty": q.difficulty,
-      "Topic": q.topic,
-      "Sub Topic": q.subTopic,
-    }));
-
-    const headers = Object.keys(csvData[0]);
-    const csvRows = [
-      headers.join(','),
-      ...csvData.map(row => 
-        headers.map(header => 
-          JSON.stringify(row[header as keyof typeof row] || '')
-        ).join(',')
-      )
-    ];
-
-    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${testFormData?.testName || 'test'}_questions.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-    message.success('CSV exported successfully!');
-  };
-
-const [publishType, setPublishType] = useState<'now' | 'schedule'>('now');
-const [scheduleDate, setScheduleDate] = useState('');
-const [scheduleTime, setScheduleTime] = useState('');
-const [liveUntil, setLiveUntil] = useState('always');
-const [customEndDate, setCustomEndDate] = useState('');
-const [customEndTime, setCustomEndTime] = useState('');
-const [startDate, setStartDate] = useState('');
-const [startTime, setStartTime] = useState('');
-
-const handleConfirmPublish = async () => {
-  // Validation for dates (same as before)
-  if (publishType === 'now') {
-    if (!startDate || !startTime) {
-      message.error('Please select both start date and time');
-      return;
-    }
-  }
+}: ChapterWiseMCQProps) {
   
-  if (publishType === 'schedule') {
-    if (!scheduleDate || !scheduleTime) {
-      message.error('Please select both date and time for scheduled publish');
-      return;
-    }
-  }
+  const {
+    testFormData,
+    questions,
+    currentIndex,
+    maxQuestions,
+    showPublishScreen,
+    pageLoading,
+    publishState,
+    currentQuestion,
+    setShowPublishScreen,
+    setPublishState,
+    updateQuestion,
+    updateOption,
+    addQuestion,
+    clearQuestion,
+    saveQuestion,
+    publishTest,
+    handleConfirmPublish,
+    handleExportCSV,
+  } = useChapterWiseMCQ(propTestFormData, testId, onQuestionsChange, onPublish, selectedQuestionId);
   
-  if (liveUntil === 'custom') {
-    if (!customEndDate || !customEndTime) {
-      message.error('Please select end date and time for custom duration');
-      return;
-    }
-  }
-
-  setPageLoading(true);
-  
-  try {
-    // Remove solution field from payload
-    const questionsPayload = questions.map(q => {
-      const correctOptionIndex = q.options.findIndex(opt => opt === q.correctAnswer);
-      const correctOption = `option${correctOptionIndex + 1}`;
-      
-      const questionData = {
-        type: "mcq",
-        question: q.text,
-        option1: q.options[0] || "",
-        option2: q.options[1] || "",
-        option3: q.options[2] || "",
-        option4: q.options[3] || "",
-        correct_option: correctOption,
-        difficulty: q.difficulty || 'easy',
-        topic: q.topic || testFormData?.topic || "",
-        sub_topic: q.subTopic || testFormData?.subTopic || "",
-        subject: testFormData?.subject || "",
-      };
-      
-      return questionData;
-    });
-
-    console.log('Sending payload:', JSON.stringify(questionsPayload, null, 2));
-
-    const bulkResponse = await createBulkQuestionsApi(questionsPayload);
-    
-    if (bulkResponse.data.status === "success") {
-      const questionIds = bulkResponse.data.data.map((q: any) => q.id);
-      
-      // CHANGE: status from "published" to "live"
-      const publishPayload = {
-        status: "live",  // ← Changed from "published" to "live"
-        publish_type: publishType,
-        ...(publishType === 'now' && {
-          start_date: startDate,
-          start_time: startTime
-        }),
-        ...(publishType === 'schedule' && {
-          scheduled_date: scheduleDate,
-          scheduled_time: scheduleTime
-        }),
-        live_until: liveUntil,
-        ...(liveUntil === 'custom' && {
-          end_date: customEndDate,
-          end_time: customEndTime
-        }),
-        question_ids: questionIds,
-        total_questions: questions.length,
-        total_marks: (testFormData?.correctAnswerMarks || 4) * questions.length
-      };
-      
-      if (testId) {
-        await publishTestApi(testId, publishPayload);
-        message.success("Test Published Successfully!");
-        onPublish?.(questions);
-        
-        setTimeout(() => {
-          window.location.href = "/dashboard";
-        }, 2000);
-      } else {
-        message.error("Test ID not found");
-      }
-    }
-  } catch (error: any) {
-    console.error('Publish failed:', error);
-    console.error('Error response:', error.response?.data);
-    message.error(error.response?.data?.message || "Failed to publish test");
-  } finally {
-    setPageLoading(false);
-  }
-};
-useEffect(() => {
-  const fetchTestData = async () => {
-    if (testId) {
-      setPageLoading(true);
-      try {
-        const response = await axiosInstance.get(`/tests/${testId}`);
-        console.log('Fetched test data:', response);
-        
-        if (response.data && response.data.status === "success") {
-          const testData = response.data.data;
-          
-          // Update form data with fetched values
-          const fetchedFormData: TestFormData = {
-            testName: testData.name || "",
-            subject: testData.subject || "",
-            topic: testData.topics?.[0] || "",
-            subTopic: testData.sub_topics?.[0] || "",
-            difficultyLevel: testData.difficulty || "easy",
-            duration: testData.total_time || 0,
-            totalMarks: testData.total_marks || 0,
-            questionsCount: testData.total_questions || 0,
-            noOfQuestions: testData.total_questions || 0,
-          };
-          
-          setTestFormData(fetchedFormData);
-          
-          if (testData.total_questions) {
-            setMaxQuestions(testData.total_questions);
-          }
-          
-          message.success("Test data loaded successfully!");
-        }
-      } catch (error) {
-        console.error('Failed to fetch test data:', error);
-        message.error('Failed to load test data');
-      } finally {
-        setPageLoading(false);
-      }
-    }
+ const updatePublishState = (key: string, value: any) => {
+    setPublishState((prev: any) => ({ ...prev, [key]: value }));
   };
-  
-  fetchTestData();
-}, [testId]);
 
 if (pageLoading) {
   return (
@@ -520,7 +94,7 @@ if (pageLoading) {
           
           <div className="questions-status">
             <Tag color="green" style={{ fontSize: '14px', padding: '4px 12px',background:'white',border:'1px solid #52c41a',borderRadius:'10px',margin:'10px' }}>
-             <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '16px' }} /> All 50 Questions done
+             <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '16px' }} /> All {maxQuestions} Questions done
             </Tag>
           </div>
         </Space>
@@ -775,170 +349,137 @@ if (pageLoading) {
         </Space>
       </div>
       </>
-          ) : (
-            // Publish screen - idha new ah create pannanum
-    
-     // Publish screen - Fixed version
-<div className="publish-review-page">
-  
-  {/* Publish Now - Start Date & End Date Section */}
+         ) : (
+  // Publish Screen with Ant Design Components
+  <div className="publish-review-page">
+    {/* Segmented Publish Type Buttons */}
+    <Segmented
+      value={publishState.publishType}
+      onChange={(value) => updatePublishState('publishType', value as 'now' | 'schedule')}
+      options={[
+        { label: "Publish Now", value: "now" },
+        { label: "Schedule Publish", value: "schedule" },
+      ]}
+      className="publish-segmented"
+    />
 
-
-  {/* Segmented Publish Type Buttons */}
-  {/* <div className="publish-type-wrapper"> */}
- <Segmented
-  value={publishType}
-  onChange={(value) => setPublishType(value as 'now' | 'schedule')}
-  options={[
-    {
-      label: "Publish Now",
-      value: "now",
-    },
-    {
-      label: "Schedule Publish",
-      value: "schedule",
-    },
-  ]}
-  className="publish-segmented"
-/>
-  {/* </div> */}
-
-  {/* Schedule Publish Section - Shows only when schedule is selected */}
-  {publishType === 'schedule' && (
-    <div className="schedule-section">
-      <Title level={5}>Select Date and Time</Title>
-      <div className="datetime-picker-wrapper">
-        <div className="datetime-field">
-          
-          <Input 
-            type="date" 
-            className="datetime-input"
-            value={scheduleDate}
-            onChange={(e) => setScheduleDate(e.target.value)}
-          />
+    {/* Schedule Publish Section */}
+    {publishState.publishType === 'schedule' && (
+      <div className="schedule-section">
+        <Title level={5}>Select Date and Time</Title>
+        <div className="datetime-picker-wrapper">
+          <div className="datetime-field">
+            <DatePicker
+              className="datetime-input"
+              placeholder="Select Date"
+              value={publishState.scheduleDate ? dayjs(publishState.scheduleDate) : null}
+              onChange={(date) => updatePublishState('scheduleDate', date ? date.format('YYYY-MM-DD') : '')}
+              style={{ width: '100%' }}
+            />
+          </div>
+          <div className="datetime-field">
+            <TimePicker
+              className="datetime-input"
+              placeholder="Select Time"
+              value={publishState.scheduleTime ? dayjs(publishState.scheduleTime, 'HH:mm') : null}
+              onChange={(time) => updatePublishState('scheduleTime', time ? time.format('HH:mm') : '')}
+              format="HH:mm"
+              style={{ width: '100%' }}
+            />
+          </div>
         </div>
-        <div className="datetime-field">
-          <Input 
-            type="time" 
-            className="datetime-input"
-            value={scheduleTime}
-            onChange={(e) => setScheduleTime(e.target.value)}
-          />
-        </div>
-      </div>
-    </div>
-  )}
-
-  
-
-  {/* Live Until Section */}
-  <div className="live-settings">
-    <Title level={5}>Live Until</Title>
-    <Text type="secondary" className="live-description">
-      Choose how long this test should remain available on the platform.
-    </Text>
-    
-    <Radio.Group 
-      value={liveUntil} 
-      onChange={(e) => setLiveUntil(e.target.value)}
-      className="live-options-group"
-    >
-      <div className="live-options-grid">
-        <Radio value="always">Always Available</Radio>
-        <Radio value="1week">1 Week</Radio>
-        <Radio value="2weeks">2 Weeks</Radio>
-        <Radio value="3weeks">3 Weeks</Radio>
-        <Radio value="1month">1 Month</Radio>
-        <Radio value="custom">Custom Duration</Radio>
-      </div>
-    </Radio.Group>
-
-    {/* Custom Duration Date Picker */}
-    {liveUntil === 'custom' && (
-      <div className="custom-date-wrapper">
-        <Text className="field-label">Select End Date</Text>
-        <Input 
-          type="date" 
-          className="end-date-input"
-          value={customEndDate}
-          onChange={(e) => setCustomEndDate(e.target.value)}
-        />
-        <Text className="field-label" style={{ marginTop: 12 }}>Select End Time</Text>
-        <Input 
-          type="time" 
-          className="end-time-input"
-          value={customEndTime}
-          onChange={(e) => setCustomEndTime(e.target.value)}
-        />
       </div>
     )}
 
-      {publishType === 'now' && (
-    <div className="date-range-section">
+    {/* Live Until Section */}
+    <div className="live-settings">
+      <Title level={5}>Live Until</Title>
+      <Text type="secondary" className="live-description">
+        Choose how long this test should remain available on the platform.
+      </Text>
       
-      <div className="datetime-picker-wrapper">
-        <div className="datetime-field">
-          <Text className="field-label">Start Date</Text>
-          <Input 
-            type="date" 
-            className="datetime-input"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
+      <Radio.Group 
+        value={publishState.liveUntil}
+        onChange={(e) => updatePublishState('liveUntil', e.target.value)}
+        className="live-options-group"
+      >
+        <div className="live-options-grid">
+          <Radio value="always">Always Available</Radio>
+          <Radio value="1week">1 Week</Radio>
+          <Radio value="2weeks">2 Weeks</Radio>
+          <Radio value="3weeks">3 Weeks</Radio>
+          <Radio value="1month">1 Month</Radio>
+          <Radio value="custom">Custom Duration</Radio>
         </div>
-        <div className="datetime-field">
-          <Text className="field-label">Start Time</Text>
-          <Input 
-            type="time" 
-            className="datetime-input"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-          />
-        </div>
-      </div>
-    </div>
-  )}
-  {publishType === 'schedule' && (
-    <div className="schedule-section">
-    
-      <div className="datetime-picker-wrapper">
-        <div className="datetime-field">
-          
-          <Input 
-            type="date" 
-            className="datetime-input"
-            placeholder="Select End Date"
-            value={scheduleDate}
-            onChange={(e) => setScheduleDate(e.target.value)}
-          />
-        </div>
-        <div className="datetime-field">
-          <Input 
-            type="time" 
-            className="datetime-input"
-            value={scheduleTime}
-            onChange={(e) => setScheduleTime(e.target.value)}
-          />
-        </div>
-      </div>
-    </div>
-  )}
-  </div>
+      </Radio.Group>
 
-  {/* Action Buttons */}
-<div className="publish-actions">
-  <Button size="large" onClick={() => setShowPublishScreen(false)}>Cancel</Button>
-  <Button 
-    type="primary" 
-    size="large" 
-    onClick={handleConfirmPublish}
-    loading={pageLoading}
-  >
-    Confirm
-  </Button>
-</div>
-</div>
-          )}
+      {/* Custom Duration Date Picker */}
+      {publishState.liveUntil === 'custom' && (
+        <div className="custom-date-wrapper">
+          <Text className="field-label">Select End Date</Text>
+          <DatePicker
+            className="end-date-input"
+            placeholder="Select End Date"
+            value={publishState.customEndDate ? dayjs(publishState.customEndDate) : null}
+            onChange={(date) => updatePublishState('customEndDate', date ? date.format('YYYY-MM-DD') : '')}
+            style={{ width: '100%' }}
+          />
+          <Text className="field-label" style={{ marginTop: 12 }}>Select End Time</Text>
+          <TimePicker
+            className="end-time-input"
+            placeholder="Select End Time"
+            value={publishState.customEndTime ? dayjs(publishState.customEndTime, 'HH:mm') : null}
+            onChange={(time) => updatePublishState('customEndTime', time ? time.format('HH:mm') : '')}
+            format="HH:mm"
+            style={{ width: '100%' }}
+          />
+        </div>
+      )}
+    </div>
+
+    {/* Start Date/Time for Publish Now */}
+    {publishState.publishType === 'now' && (
+      <div className="schedule-section">
+        <div className="datetime-picker-wrapper">
+          <div className="datetime-field">
+            <Text className="field-label">Start Date</Text>
+            <DatePicker
+              className="datetime-input"
+              placeholder="Select Start Date"
+              value={publishState.startDate ? dayjs(publishState.startDate) : null}
+              onChange={(date) => updatePublishState('startDate', date ? date.format('YYYY-MM-DD') : '')}
+              style={{ width: '100%' }}
+            />
+          </div>
+          <div className="datetime-field">
+            <Text className="field-label">Start Time</Text>
+            <TimePicker
+              className="datetime-input"
+              placeholder="Select Start Time"
+              value={publishState.startTime ? dayjs(publishState.startTime, 'HH:mm') : null}
+              onChange={(time) => updatePublishState('startTime', time ? time.format('HH:mm') : '')}
+              format="HH:mm"
+              style={{ width: '100%' }}
+            />
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Action Buttons */}
+    <div className="publish-actions">
+      <Button size="large" onClick={() => setShowPublishScreen(false)}>Cancel</Button>
+      <Button 
+        type="primary" 
+        size="large" 
+        onClick={handleConfirmPublish}
+        loading={pageLoading}
+      >
+        Confirm
+      </Button>
+    </div>
+  </div>
+)}
       </div>
  
     
